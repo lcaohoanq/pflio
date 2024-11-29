@@ -1,0 +1,264 @@
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+@media only screen and (min-width: 321px) and (max-width: 768px) {
+  .Home {
+    header {
+      font-size: 7vw;
+    }
+
+    .Body {
+      .Logo {
+        .logo-img {
+          width: 60%;
+        }
+      }
+
+      .Button {
+        margin-top: 50px;
+        .Login-Register-Container {
+          gap: 2rem;
+          margin-bottom: 2rem;
+          .card_button a {
+            @include button-styles-sugar(35vw, 7vh);
+            @include text-styles(white, 5vw, bold);
+          }
+        }
+
+        .Continue-Container {
+          margin-bottom: 3.5rem;
+          .card_button a {
+            @include button-styles-sugar(60vw, 7vh);
+            @include text-styles(white, 5vw, bold);
+          }
+        }
+      }
+    }
+  }
+
+  // Login, Register page
+  .App {
+    #App-logo {
+      display: none;
+    }
+
+    .forgot-password {
+      margin-left: 50px;
+    }
+  }
+
+  .GameOver {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15vw;
+
+    header {
+      font-size: 15vw;
+    }
+    main {
+      .Score {
+        font-size: 7vw;
+      }
+
+      .Direction {
+        @include flex-column-container;
+        .card_button_gameover {
+          width: 50vw;
+          height: 7vh;
+          font-size: 5vw;
+          @include setMargin(0, 0, 2vh, 0);
+
+          a#playAgain {
+            width: 50vw;
+            height: 7vh;
+          }
+
+          a#highScore {
+            width: 50vw;
+            height: 7vh;
+          }
+
+          a#mainMenu {
+            width: 50vw;
+            height: 7vh;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1200px) {
+  .Home {
+    header {
+      font-size: 7vw;
+    }
+  }
+
+  .App {
+    display: flex;
+    flex-direction: row;
+    #App-logo {
+      width: 70%;
+    }
+  }
+
+  .GameOver {
+    header {
+      font-size: 15vw;
+    }
+    main {
+      .Score {
+        font-size: 7vw;
+      }
+
+      .Direction {
+        @include flex-column-container;
+        .card_button_gameover {
+          width: 40vw;
+          height: 8vh;
+          font-size: 5vw;
+
+          @include setMargin(0, 0, 4vh, 0);
+
+          a#playAgain {
+            @include flex-row-container;
+            width: 40vw;
+            height: 8vh;
+            background-color: $main-color;
+          }
+
+          a#highScore {
+            @include flex-row-container;
+            width: 40vw;
+            height: 8vh;
+            background-color: $register-background-color;
+          }
+
+          a#mainMenu {
+            @include flex-row-container;
+            width: 40vw;
+            height: 8vh;
+            background-color: $continue-background-color;
+          }
+        }
+      }
+    }
+    footer {
+      margin-top: 15vh;
+    }
+  }
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1920px) {
+  .Home {
+    header {
+      font-size: 8rem;
+    }
+
+    .Body {
+      @include flex-row-container;
+      padding: 2rem;
+
+      .Logo img {
+        width: 100%;
+        height: auto;
+      }
+
+      .Button {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+
+        .Login-Register-Container {
+          gap: 3rem;
+        }
+
+        a {
+          .log {
+            font-size: 4rem;
+            width: 250px;
+            height: 100px;
+          }
+
+          .reg {
+            font-size: 4rem;
+            width: 250px;
+            height: 100px;
+          }
+
+          .continue {
+            font-size: 3rem;
+            width: 400px;
+            height: 100px;
+          }
+        }
+      }
+    }
+
+    footer {
+      p {
+        font-size: 1.5rem;
+      }
+
+      a {
+        margin-bottom: 1rem;
+        font-size: 2rem;
+      }
+    }
+  }
+
+  // Login, Register page
+  .App {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .GameOver {
+    header {
+      font-size: 8vw;
+    }
+    main {
+      .Score {
+        font-size: 3vw;
+      }
+
+      .Direction {
+        @include flex-column-container;
+        .card_button_gameover {
+          width: 30vw;
+          height: 6vw;
+          font-size: 3vw;
+
+          @include setMargin(0, 0, 2vh, 0);
+
+          a#playAgain {
+            @include flex-row-container;
+            width: 30vw;
+            height: 6vw;
+            background-color: $main-color;
+          }
+
+          a#highScore {
+            @include flex-row-container;
+            width: 30vw;
+            height: 6vw;
+            background-color: $register-background-color;
+          }
+
+          a#mainMenu {
+            @include flex-row-container;
+            width: 30vw;
+            height: 6vw;
+            background-color: $continue-background-color;
+          }
+        }
+      }
+    }
+  }
+}

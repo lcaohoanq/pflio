@@ -1,0 +1,35 @@
+$button-transition: 0.2s;
+$button-shadow: 0 3px 0;
+$button-active-shadow: 0 1px 0 black;
+$button-active-transform: translateY(2px);
+
+// google-button
+$google-btn-color: #4285f4;
+$google-btn-active-color: #1669f2;
+$google-btn-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+$google-btn-hover-shadow: 0 0 6px $google-btn-color;
+
+// color
+$main-color: #19b719;
+$main-color-hover: #2bcd2b;
+$main-color-border: #118011;
+$text-white: #ffffff;
+$text-black: #000000;
+
+// size button
+$button-home-width: 15vw;
+$button-home-height: 10vh;
+
+// color button
+$login-background-color: #19b719;
+$login-border-color: #118011;
+$login-shadow-color: #118011;
+$register-background-color: #ff0000;
+$register-border-color: #b30000;
+$register-shadow-color: #b30000;
+$continue-background-color: #4d96ff;
+$continue-border-color: #002299;
+$continue-shadow-color: #0027b6;
+
+// font
+$font-family: 'Roboto', sans-serif;

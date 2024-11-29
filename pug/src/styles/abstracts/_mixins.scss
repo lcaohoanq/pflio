@@ -1,0 +1,102 @@
+@use 'variables' as *;
+
+@mixin button-press-effect($bg-color, $border-color, $shadow-color) {
+  background-color: $bg-color;
+  border: 1.5px solid $border-color;
+  box-shadow: $button-shadow $shadow-color;
+  transition: $button-transition;
+
+  &:hover {
+    background-color: lighten($bg-color, 10%);
+  }
+
+  &:active {
+    box-shadow: $button-active-shadow;
+    transform: $button-active-transform;
+  }
+}
+
+@mixin button-styles-sugar($width, $height) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $width;
+  height: $height;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.25rem 0.75rem;
+  border-radius: 10px;
+  transition: $button-transition;
+}
+
+@mixin text-styles($color, $size, $weight) {
+  color: $color;
+  font-size: $size;
+  font-weight: $weight;
+}
+
+@mixin dimensions($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin setBorderRadius($radius) {
+  border-radius: $radius;
+}
+
+@mixin setBackgroundColor($color) {
+  background-color: $color;
+}
+
+@mixin setForegroundColor($color) {
+  color: $color;
+}
+
+@mixin setColor($background-color, $color) {
+  @include setBackgroundColor($background-color);
+  @include setForegroundColor($color);
+}
+
+@mixin button-styles($width, $height, $bg-color, $border-color, $shadow-color, $radius) {
+  cursor: pointer;
+  @include setBorderRadius($radius);
+  @include dimensions($width, $height);
+  @include button-press-effect($bg-color, $border-color, $shadow-color);
+}
+
+@mixin setMargin($top, $right, $bottom, $left) {
+  margin-top: $top;
+  margin-right: $right;
+  margin-bottom: $bottom;
+  margin-left: $left;
+}
+
+@mixin setPadding($top, $right, $bottom, $left) {
+  padding-top: $top;
+  padding-right: $right;
+  padding-bottom: $bottom;
+  padding-left: $left;
+}
+
+@mixin flex-custom($direction, $justify, $align, $gap) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: if($justify != '', $justify, null);
+  align-items: if($align != '', $align, null);
+  gap: $gap;
+}
+
+@mixin flex-row-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-column-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

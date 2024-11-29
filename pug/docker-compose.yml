@@ -1,0 +1,7 @@
+version: '2.28.1'
+services:
+  web:
+    image: lcaohoanq/websnakegamefe:1.0
+    container_name: websnakegamefe
+    ports:
+      - '80:80'
