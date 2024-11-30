@@ -4,13 +4,38 @@ import (
 	"log"
 	"os"
 
-	"lcaohoanq/pfolio/server/internal/constants"
 	"lcaohoanq/pfolio/server/internal/routes"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
+
+func CORSMiddleware() gin.HandlerFunc {
+	// Define allowed origins
+	allowedOrigins := map[string]bool{
+		"http://localhost:4200":  true,
+		"https://yourdomain.com": true,
+	}
+
+	return func(c *gin.Context) {
+		origin := c.GetHeader("Origin")
+
+		// Check if the origin is in the allowed list
+		if allowedOrigins[origin] {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+			c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+			c.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, accept, origin, Cache-Control, X-Requested-With")
+			c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, PATCH, DELETE")
+		}
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}
 
 func main() {
 	if err := godotenv.Load(); err != nil {
@@ -22,14 +47,7 @@ func main() {
 	r := gin.Default()
 
 	// CORS configuration
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{constants.CLIENT_URL},
-		AllowMethods:     []string{"GET"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
-		ExposeHeaders:    []string{"Content-Length", "Content-Type"},
-		AllowCredentials: true,
-		MaxAge:           12 * 60 * 60,
-	}))
+	r.Use(CORSMiddleware())
 
 	// Routes
 	routes.SetupRoutes(r)
