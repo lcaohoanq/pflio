@@ -1,0 +1,18 @@
+// this tsconfig is for the vite config file only
+
+// ******* DO NOT USE THIS WHEN DEVELOPMENT, this is for the vite server *********
+{
+  "schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2020",
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "strict": true
+  },
+  "include": ["src/**/*", "vite.config.js"]
+}
+
+// why do we need this tsconfig.node.json??? because vite server run in node??? // or maybe need to convert .ts config file back to .js like tailwind.config.ts ??
