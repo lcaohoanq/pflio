@@ -1,0 +1,28 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Luu Cao Hoang (lcaohoanq)
+    script(src="https://cdn.tailwindcss.com")
+
+  body
+    .flex.justify-center.items-center.gap-6.bg-[#f1f1f1].min-h-[100vh]
+      img.h-[20rem].w-[20rem].rounded-full(
+        src="#{profile.avatarUrl}"
+        alt="#{profile.name}"
+      )
+      .flex.flex-col.gap-4
+        h1.text-2xl #{profile.name}
+        p.text-[#606060] #{profile.githubAccount}
+        p.text-[#606060] #{profile.role}
+        .flex.gap-2
+          each social in profile.socialLinks
+            .link-icon.flex.justify-center.items-center.w-12.h-12.rounded-full.bg-transparent.transition-transform.duration-300.hover:cursor-pointer.hover:bg-[#d8d8d8].hover:scale-110(
+              data-url="#{social.url}"
+              onclick="window.open(this.getAttribute('data-url'), '_blank')"
+            )
+              img.w-12.h-12(
+                src="#{social.iconUrl}"
+                alt="#{social.type}"
+              )
