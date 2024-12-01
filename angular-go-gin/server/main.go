@@ -1,6 +1,7 @@
 package main
 
 import (
+	"lcaohoanq/pfolio/server/internal/constants"
 	"log"
 	"os"
 
@@ -13,7 +14,7 @@ import (
 func CORSMiddleware() gin.HandlerFunc {
 	// Define allowed origins
 	allowedOrigins := map[string]bool{
-		"http://localhost:4200":  true,
+		constants.ClientUrl:      true,
 		"https://yourdomain.com": true,
 	}
 

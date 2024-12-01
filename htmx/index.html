@@ -5,27 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Luu Cao Hoang (lcaohoanq)</title>
     <link rel="stylesheet" href="./style.css" />
-    <link rel="icon" href="./assets/dev.png" />
-    <!-- Add HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
   </head>
   <body>
-    <img class="avatar" src="./assets/avatar.jpeg" alt="Avatar" />
-    <div class="content">
-      <h1>Luu Cao Hoang</h1>
-      <p>GitHub account is lcaohoanq</p>
-      <p>Fullstack Web Developer</p>
-      <div class="link">
-        <!-- Using HTMX for navigation -->
-        <div
-          class="link-icon"
-          hx-get="https://github.com/lcaohoanq"
-          hx-trigger="click"
-          hx-on="htmx:afterSwap: window.location.href = event.target.href"
-        >
-          <img src="./assets/github.png" alt="Github" />
-        </div>
-      </div>
+    <div
+      id="profile-container"
+      hx-get="https://6512cbd2b8c6ce52b3963937.mockapi.io/api/v1/profiles"
+      hx-trigger="load"
+      hx-target="this"
+      hx-swap="innerHTML"
+    >
+      Loading profile...
     </div>
+
+    <script>
+      function navigateTo(url) {
+        window.open(url, "_blank");
+      }
+
+      document.body.addEventListener("htmx:afterOnLoad", function (evt) {
+        try {
+          const profiles = JSON.parse(evt.detail.xhr.responseText);
+          if (!profiles || profiles.length === 0) {
+            throw new Error("No profile data found");
+          }
+
+          const profile = profiles[0];
+          const profileHtml = `
+            <img class="avatar" src="${profile.avatarUrl}" alt="Avatar" />
+            <div class="content">
+              <h1>${profile.name}</h1>
+              <p>${profile.githubAccount}</p>
+              <p>${profile.role}</p>
+              <div class="link">
+                ${profile.socialLinks
+                  .map(
+                    (link) => `
+                      <div class="link-icon" onclick="navigateTo('${link.url}')">
+                        <img src="${link.iconUrl}" alt="${link.type}" />
+                      </div>
+                    `
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `;
+
+          evt.detail.elt.innerHTML = profileHtml;
+        } catch (error) {
+          evt.detail.elt.innerHTML = `<div class="error"><h2>Error Loading Profile</h2><p>${error.message}</p></div>`;
+          console.error("Profile rendering error:", error);
+        }
+      });
+    </script>
   </body>
 </html>

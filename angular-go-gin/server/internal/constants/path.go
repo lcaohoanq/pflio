@@ -1,3 +1,3 @@
 package constants
 
-const CLIENT_URL = "http://localhost:4200"
+const ClientUrl = "http://localhost:4200"
