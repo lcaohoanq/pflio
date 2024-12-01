@@ -1,40 +1,39 @@
-import { Component } from "@angular/core";
-
-interface SocialLink {
-  name: string;
-  url: string;
-}
+import { Component, OnInit } from '@angular/core';
+import { ProfileService } from "../services/profile.service";
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
-  informationURL: SocialLink[] = [
-    {
-      name: "github",
-      url: "https://github.com/lcaohoanq",
-    },
-    {
-      name: "ig",
-      url: "https://www.instagram.com/lcaohoanq/",
-    },
-  ];
+export class HomeComponent implements OnInit {
+  profile: any = null; // Initialize profile as null
+  informationURLMap: { [key: string]: string } = {};
 
-  // Convert the array to a map
-  informationURLMap: { [key: string]: string } = this.informationURL.reduce<{
-    [key: string]: string;
-  }>((acc, item) => {
-    acc[item.name] = item.url;
-    return acc;
-  }, {});
+  constructor(private profileService: ProfileService) {}
+
+  ngOnInit(): void {
+    this.profileService.getProfile().subscribe({
+      next: (data) => {
+        this.profile = data[0]; // Assuming the API returns a single profile in an array
+        this.informationURLMap = this.profile.socialLinks.reduce((acc: { [key: string]: string }, item: any) => {
+          acc[item.type] = item.url;
+          return acc;
+        }, {});
+      },
+      error: (error) => {
+        console.error('Error fetching profile data', error);
+      },
+      complete: () => {
+        console.log('Profile data fetch complete');
+      },
+    });
+  }
 
   handleNavigate(name: string): void {
     const url = this.informationURLMap[name];
-
     if (url) {
-      window.open(url, "_blank");
+      window.open(url, '_blank');
     }
   }
 }
