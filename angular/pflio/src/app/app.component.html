@@ -1,1 +1,24 @@
-<app-home></app-home>
+<div
+  *ngIf="profile"
+  class="flex flex-col md:flex-row items-center justify-center gap-6 bg-[#f1f1f1] min-h-[100vh]"
+>
+  <img
+    class="h-[20rem] w-[20rem] rounded-full"
+    [src]="profile.avatarUrl"
+    alt="Avatar"
+  />
+  <div class="flex flex-col gap-4 text-center md:text-left">
+    <h1 class="text-3xl">{{ profile.name ?? 'Loading...' }}</h1>
+    <p class="text-[#606060] text-xl">{{ profile.githubAccount ?? 'Loading...' }}</p>
+    <p class="text-[#606060] text-xl mb-3">{{ profile.role ?? 'Loading...' }}</p>
+    <div class="flex gap-2 justify-center md:justify-start">
+      <div
+        *ngFor="let link of profile.socialLinks"
+        (click)="handleNavigate(link.type)"
+        class="link-icon flex justify-center items-center w-12 h-12 rounded-full bg-transparent transition-transform duration-300 hover:cursor-pointer hover:bg-[#d8d8d8] hover:scale-110"
+      >
+        <img class="w-12 h-12" [src]="link.iconUrl" [alt]="link.type" />
+      </div>
+    </div>
+  </div>
+</div>
