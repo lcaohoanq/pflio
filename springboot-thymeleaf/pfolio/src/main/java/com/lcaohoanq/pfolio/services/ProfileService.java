@@ -14,7 +14,7 @@ public class ProfileService {
         profile.setName("Luu Cao Hoang");
         profile.setAvatarUrl("/assets/avatar.jpeg");
         profile.setGithubAccount("GitHub account is lcaohoanq");
-        profile.setRole("Fullstack Web Developer");
+        profile.setRole("Backend Developer");
         
         SocialLink github = new SocialLink();
         github.setType("github");
