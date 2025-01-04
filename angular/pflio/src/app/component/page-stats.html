@@ -1,0 +1,15 @@
+<div class="stats-container" *ngIf="pageViewService.viewStats$ | async as stats">
+  <div class="total-view">visitor : {{ stats.totalViews }}</div>
+
+  <div class="detail" style="display: none">
+    <h3>Views by Page</h3>
+    <div *ngFor="let item of objectEntries(stats.viewsByPage)">
+      {{ item[0] || 'Home' }}: {{ item[1] }} views
+    </div>
+
+    <h3>Views by Date</h3>
+    <div *ngFor="let item of objectEntries(stats.viewsByDate)">
+      {{ item[0] }}: {{ item[1] }} views
+    </div>
+  </div>
+</div>

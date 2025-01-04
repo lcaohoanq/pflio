@@ -1,0 +1,36 @@
+:host {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.stats-container {
+  padding: 1rem;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #525CEB;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  font-size: 0.9rem;
+
+  .total-view{
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #525CEB;
+    color: #FFFFFF;
+  }
+
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}

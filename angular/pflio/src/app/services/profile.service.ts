@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from "../../environments/environment";
 
 interface SocialLink {
   type: string;
@@ -20,7 +21,7 @@ export interface Profile {
   providedIn: 'root',
 })
 export class ProfileService {
-  private apiUrl = 'https://6512cbd2b8c6ce52b3963937.mockapi.io/api/v1/profiles';
+  private apiUrl = environment.apiUrl.profile;
 
   constructor(private http: HttpClient) {}
 
