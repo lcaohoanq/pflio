@@ -8,7 +8,7 @@ interface SocialLink {
   iconUrl: string;
 }
 
-interface Profile {
+export interface Profile {
   name: string;
   avatarUrl: string;
   githubAccount: string;

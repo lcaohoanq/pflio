@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ProfileService } from "./services/profile.service";
+import { Profile, ProfileService } from "./services/profile.service";
 
 @Component({
   selector: 'app-root',
@@ -7,7 +7,7 @@ import { ProfileService } from "./services/profile.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  profile: any = null; // Initialize profile as null
+  profile: Profile | any = null; // Initialize profile as null
   informationURLMap: { [key: string]: string } = {};
 
   constructor(private profileService: ProfileService) {}

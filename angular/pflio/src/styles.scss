@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'SFBold';
+  src: url('assets/font/SFCompactRounded-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'SFMono-Bold';
+  src: url('assets/font/SFMono-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'SFMono-Light';
+  src: url('assets/font/SFMono-Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'SFProRounded-Thin';
+  src: url('assets/font/SFProRounded-Thin.otf') format('opentype');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,5 +30,4 @@
 
 html {
   font-size: 62.5%;
-  font-family: "Roboto", sans-serif;
 }
