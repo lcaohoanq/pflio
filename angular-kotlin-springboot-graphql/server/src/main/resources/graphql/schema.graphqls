@@ -1,0 +1,17 @@
+type Profile{
+    name: String!
+    avatarUrl: String!
+    githubAccount: String!
+    role: String!
+    socialLinks: [SocialLink!]!
+}
+
+type SocialLink{
+    type: String!
+    url: String!
+    iconUrl: String!
+}
+
+type Query {
+    getProfile: Profile!
+}
