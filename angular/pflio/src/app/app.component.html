@@ -1,14 +1,18 @@
-<main
-  *ngIf="profile"
->
-  <img class="avatar"
-    [src]="profile.avatarUrl"
-    alt="Avatar"
-  />
+<main *ngIf="profile">
+  <img class="avatar" [src]="profile.avatarUrl" alt="Avatar" />
   <div class="content">
-    <h1>{{ profile.name ?? 'Loading...' }}</h1>
-    <p>{{ profile.githubAccount ?? 'Loading...' }}</p>
-    <p>{{ profile.role ?? 'Loading...' }}</p>
+    <h1>{{ profile.name ?? "Loading..." }}</h1>
+    <p>{{ profile.role ?? "Loading..." }}</p>
+    <p>
+      When I'm not coding, you'll likely find me capturing moments through my
+      lens , <a href="https://unsplash.com/@lcaohoanq">Unsplash</a>,📸 or
+      enjoying a peaceful bike ride
+    </p>
+    <p>
+      I also enjoy sharing knowledge through my blog,
+      <a href="https://shinbun.vercel.app/">shinbun 新聞</a>, where I write
+      about tech, development tips, and more.
+    </p>
     <div class="link-icons-container">
       <div
         *ngFor="let link of profile.socialLinks"
@@ -21,4 +25,3 @@
   </div>
 </main>
 <app-page-stats></app-page-stats>
-
