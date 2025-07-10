@@ -61,8 +61,8 @@ const ProjectsSection: React.FC<ProjectsProps> = ({ currentSection }) => {
   ];
 
   return (
-    <div className="max-w-6xl  mx-auto h-[20%]">
-      <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+    <div className="max-w-6xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-6 max-h-[60vh] overflow-hidden">
         {projects.map((project, index) => (
           <div
             key={project.title}
@@ -72,7 +72,7 @@ const ProjectsSection: React.FC<ProjectsProps> = ({ currentSection }) => {
           >
             {/* Project Image/Gradient */}
             <div
-              className={`h-48 bg-gradient-to-r ${project.gradient} relative overflow-hidden`}
+              className={`h-32 md:h-36 bg-gradient-to-r ${project.gradient} relative overflow-hidden`}
             >
               <div className="absolute inset-0 bg-black/20"></div>
               <div className="absolute inset-0 flex items-center justify-center">
@@ -109,20 +109,20 @@ const ProjectsSection: React.FC<ProjectsProps> = ({ currentSection }) => {
             </div>
 
             {/* Project Content */}
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-300 transition-colors">
+            <div className="p-4">
+              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
                 {project.title}
               </h3>
-              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+              <p className="text-gray-300 mb-3 text-xs leading-relaxed line-clamp-2">
                 {project.description}
               </p>
 
               {/* Technologies */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.technologies.map((tech, techIndex) => (
+              <div className="flex flex-wrap gap-1 mb-3">
+                {project.technologies.slice(0, 3).map((tech, techIndex) => (
                   <span
                     key={tech}
-                    className="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm border border-white/10"
+                    className="bg-white/20 text-white px-2 py-0.5 rounded-full text-xs font-medium backdrop-blur-sm border border-white/10"
                     style={{
                       animationDelay:
                         currentSection === 3 ? `${techIndex * 100}ms` : "0ms",
@@ -131,13 +131,18 @@ const ProjectsSection: React.FC<ProjectsProps> = ({ currentSection }) => {
                     {tech}
                   </span>
                 ))}
+                {project.technologies.length > 3 && (
+                  <span className="bg-white/10 text-white px-2 py-0.5 rounded-full text-xs">
+                    +{project.technologies.length - 3}
+                  </span>
+                )}
               </div>
 
               {/* Project Links */}
-              <div className="flex space-x-4">
+              <div className="flex space-x-3">
                 <a
                   href={project.liveUrl}
-                  className="text-blue-300 hover:text-blue-200 transition-colors text-sm font-medium flex items-center space-x-1"
+                  className="text-blue-300 hover:text-blue-200 transition-colors text-xs font-medium flex items-center space-x-1"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -146,7 +151,7 @@ const ProjectsSection: React.FC<ProjectsProps> = ({ currentSection }) => {
                 </a>
                 <a
                   href={project.githubUrl}
-                  className="text-gray-300 hover:text-white transition-colors text-sm font-medium flex items-center space-x-1"
+                  className="text-gray-300 hover:text-white transition-colors text-xs font-medium flex items-center space-x-1"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -160,12 +165,12 @@ const ProjectsSection: React.FC<ProjectsProps> = ({ currentSection }) => {
       </div>
 
       {/* Additional Projects Link */}
-      <div className="text-center mt-12">
+      <div className="text-center mt-6">
         <a
           href="https://github.com/lcaohoanq"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-105"
+          className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-105 text-sm"
         >
           <span>View All Projects</span>
           <span>↗</span>

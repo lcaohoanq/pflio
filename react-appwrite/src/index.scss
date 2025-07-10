@@ -554,3 +554,20 @@ h1, h2, h3 {
     0 4px 8px rgba(0, 0, 0, 0.12),
     0 8px 16px rgba(0, 0, 0, 0.08);
 }
+
+/* Line clamp utilities for text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
