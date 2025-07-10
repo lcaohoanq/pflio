@@ -6,7 +6,7 @@ import KeyboardHints from "../components/KeyboardHints";
 import MouseFollower from "../components/MouseFollower";
 import ScrollEffects from "../components/ScrollEffects";
 import PerformanceMonitor from "../components/PerformanceMonitor";
-import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
+// import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
 import ThemeSelector from "../components/ThemeSelector";
 import { useTheme } from "../components/ThemeProvider";
 

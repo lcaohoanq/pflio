@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Project } from "~/types";
 
-interface Project {
-  title: string;
-  description: string;
-  image: string;
-  technologies: string[];
-  liveUrl?: string;
-  githubUrl?: string;
-  gradient: string;
-}
-
-interface ProjectsProps {
+interface Props {
   currentSection: number;
 }
 
-const ProjectsSection: React.FC<ProjectsProps> = ({ currentSection }) => {
+const ProjectsSection: React.FC<Props> = ({ currentSection }) => {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const [visibleProjects, setVisibleProjects] = useState<number>(0);
   const [animationStep, setAnimationStep] = useState<number>(0);
