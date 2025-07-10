@@ -3,6 +3,10 @@ import { animate, stagger } from "animejs";
 import SkillsSection from "../components/SkillsSection";
 import ProjectsSection from "../components/ProjectsSection";
 import KeyboardHints from "../components/KeyboardHints";
+import MouseFollower from "../components/MouseFollower";
+import ScrollEffects from "../components/ScrollEffects";
+import PerformanceMonitor from "../components/PerformanceMonitor";
+import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
 
 const Portfolio: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,7 +14,17 @@ const Portfolio: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [showKeyboardHints, setShowKeyboardHints] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [parallaxOffset, setParallaxOffset] = useState(0);
+  const [lastScrollDirection, setLastScrollDirection] = useState<"up" | "down">(
+    "down",
+  );
+  const [showScrollEffects, setShowScrollEffects] = useState(false);
+  const [showPerformanceMonitor, setShowPerformanceMonitor] = useState(false);
   const sectionsRef = useRef<HTMLElement[]>([]);
+  const particlesRef = useRef<HTMLDivElement[]>([]);
+
+  const sectionTitles = ["Hero", "About", "Skills", "Projects", "Contact"];
 
   const sections = [
     {
@@ -20,24 +34,39 @@ const Portfolio: React.FC = () => {
       content: (
         <div className="text-center space-y-6 md:space-y-8">
           <div className="relative">
-            <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full overflow-hidden border-4 border-white shadow-2xl relative z-10">
+            <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full overflow-hidden border-4 border-white shadow-2xl relative z-10 hover:shadow-3xl transition-all duration-500 hover:scale-105 magnetic-hover">
               <img
                 src="https://avatars.githubusercontent.com/u/136492579?v=4"
                 alt="Profile"
                 className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
               />
+              {/* Glowing ring effect */}
+              <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-pulse"></div>
             </div>
-            {/* Floating circles animation */}
+            {/* Enhanced floating circles animation */}
             <div className="absolute inset-0 -z-10">
-              {[...Array(6)].map((_, i) => (
+              {[...Array(8)].map((_, i) => (
                 <div
                   key={i}
-                  className="absolute w-4 h-4 bg-white/20 rounded-full animate-pulse"
+                  className="absolute w-3 h-3 md:w-4 md:h-4 bg-white/20 rounded-full animate-pulse hover:bg-white/40 transition-colors"
                   style={{
-                    left: `${20 + Math.sin((i * Math.PI) / 3) * 100}%`,
-                    top: `${50 + Math.cos((i * Math.PI) / 3) * 50}%`,
-                    animationDelay: `${i * 0.5}s`,
-                    animationDuration: "3s",
+                    left: `${30 + Math.sin((i * Math.PI) / 4) * 80}%`,
+                    top: `${50 + Math.cos((i * Math.PI) / 4) * 40}%`,
+                    animationDelay: `${i * 0.3}s`,
+                    animationDuration: `${2 + Math.random()}s`,
+                    filter: `hue-rotate(${i * 45}deg)`,
+                  }}
+                />
+              ))}
+              {/* Orbiting elements */}
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={`orbit-${i}`}
+                  className="absolute w-1 h-1 bg-blue-300/60 rounded-full"
+                  style={{
+                    left: `${50 + Math.sin((Date.now() / 1000 + i * 2) * 0.5) * 60}%`,
+                    top: `${50 + Math.cos((Date.now() / 1000 + i * 2) * 0.5) * 30}%`,
+                    animation: `orbit ${3 + i}s linear infinite`,
                   }}
                 />
               ))}
@@ -273,30 +302,88 @@ const Portfolio: React.FC = () => {
       setIsAnimating(true);
       const currentSectionEl = sectionsRef.current[currentSection];
       const nextSectionEl = sectionsRef.current[index];
+      const isScrollingDown = index > currentSection;
+
+      // Update parallax offset for background movement
+      setParallaxOffset(index * 50);
+      setLastScrollDirection(isScrollingDown ? "down" : "up");
+      setShowScrollEffects(true);
 
       if (currentSectionEl && nextSectionEl) {
-        // Enhanced exit animation
+        // Enhanced exit animation with parallax and rotation
         animate(currentSectionEl.children, {
-          opacity: 0,
-          translateY: index > currentSection ? -30 : 30,
-          scale: 0.95,
-          duration: 500,
-          easing: "easeInCubic",
+          opacity: [1, 0],
+          translateY: isScrollingDown ? [-20, -80] : [20, 80],
+          translateX: isScrollingDown ? [0, -30] : [0, 30],
+          scale: [1, 0.8],
+          rotateX: isScrollingDown ? [0, -15] : [0, 15],
+          rotateY: [0, isScrollingDown ? 10 : -10],
+          duration: 600,
+          easing: "easeInQuart",
+          delay: stagger(50, { from: isScrollingDown ? "first" : "last" }),
           complete: () => {
             setCurrentSection(index);
+            setScrollProgress((index + 1) / sections.length);
 
-            // Enhanced entrance animation
+            // Create wave effect for entrance
+            const waveDelay = stagger(100, {
+              grid: [3, 3],
+              from: isScrollingDown ? "first" : "last",
+            });
+
+            // Enhanced entrance animation with bounce and glow effects
             animate(nextSectionEl.children, {
               opacity: [0, 1],
-              translateY: index > currentSection ? [30, 0] : [-30, 0],
-              scale: [0.95, 1],
-              delay: stagger(80, { start: 200 }),
-              duration: 700,
-              easing: "easeOutCubic",
+              translateY: isScrollingDown ? [60, 0] : [-60, 0],
+              translateX: isScrollingDown ? [40, 0] : [-40, 0],
+              scale: [0.7, 1.05, 1],
+              rotateX: isScrollingDown ? [20, -5, 0] : [-20, 5, 0],
+              rotateY: [isScrollingDown ? -15 : 15, 0],
+              duration: 1000,
+              easing: "easeOutElastic(1, .8)",
+              delay: waveDelay,
               complete: () => {
                 setIsAnimating(false);
+
+                // Add subtle floating animation to elements
+                animate(nextSectionEl.querySelectorAll("h1, h2, h3"), {
+                  translateY: [0, -5, 0],
+                  duration: 3000,
+                  easing: "easeInOutSine",
+                  loop: true,
+                  direction: "alternate",
+                });
               },
             });
+
+            // Animate background particles
+            if (particlesRef.current[index]) {
+              animate(particlesRef.current[index].children, {
+                scale: [0, 1],
+                opacity: [0, 0.6, 0.3],
+                rotate: [0, 360],
+                duration: 2000,
+                easing: "easeOutQuart",
+                delay: stagger(100, { start: 400 }),
+              });
+            }
+          },
+        });
+
+        // Create screen transition effect
+        const transitionOverlay = document.createElement("div");
+        transitionOverlay.className = "fixed inset-0 z-40 pointer-events-none";
+        transitionOverlay.style.background = `linear-gradient(${
+          isScrollingDown ? "0deg" : "180deg"
+        }, transparent 0%, rgba(0,0,0,0.8) 50%, transparent 100%)`;
+        document.body.appendChild(transitionOverlay);
+
+        animate(transitionOverlay, {
+          opacity: [0, 1, 0],
+          duration: 800,
+          easing: "easeInOutQuart",
+          complete: () => {
+            document.body.removeChild(transitionOverlay);
           },
         });
       } else {
@@ -333,6 +420,8 @@ const Portfolio: React.FC = () => {
         scrollToSection(currentSection - 1);
       } else if (e.key === "h" || e.key === "H") {
         setShowKeyboardHints(!showKeyboardHints);
+      } else if (e.key === "p" || e.key === "P") {
+        setShowPerformanceMonitor(!showPerformanceMonitor);
       }
     },
     [
@@ -341,6 +430,7 @@ const Portfolio: React.FC = () => {
       scrollToSection,
       sections.length,
       showKeyboardHints,
+      showPerformanceMonitor,
     ],
   );
 
@@ -371,7 +461,14 @@ const Portfolio: React.FC = () => {
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentSection]);
+  }, [handleKeyDown]);
+
+  useEffect(() => {
+    if (showScrollEffects) {
+      const timer = setTimeout(() => setShowScrollEffects(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showScrollEffects]);
 
   return (
     <div
@@ -451,22 +548,116 @@ const Portfolio: React.FC = () => {
           }}
         >
           <div className="w-full max-w-7xl mx-auto relative">
-            {/* Floating particles effect */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              {[...Array(20)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute w-2 h-2 bg-white/20 rounded-full animate-pulse"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 2}s`,
-                    animationDuration: `${2 + Math.random() * 3}s`,
-                  }}
-                />
-              ))}
+            {/* Enhanced floating particles effect with morphing shapes */}
+            <div
+              className="absolute inset-0 overflow-hidden pointer-events-none"
+              ref={(el) => {
+                if (el) particlesRef.current[index] = el;
+              }}
+            >
+              {[...Array(30)].map((_, i) => {
+                const shapes = ["circle", "square", "triangle", "diamond"];
+                const shape = shapes[i % shapes.length];
+                const size = Math.random() * 4 + 2;
+
+                return (
+                  <div
+                    key={i}
+                    className={`absolute bg-white/20 animate-pulse particle-${shape}`}
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      width: `${size}px`,
+                      height: `${size}px`,
+                      borderRadius:
+                        shape === "circle"
+                          ? "50%"
+                          : shape === "diamond"
+                            ? "50% 0"
+                            : "0",
+                      transform:
+                        shape === "triangle" ? "rotate(45deg)" : "none",
+                      animationDelay: `${Math.random() * 2}s`,
+                      animationDuration: `${2 + Math.random() * 3}s`,
+                      filter: `hue-rotate(${index * 60}deg)`,
+                    }}
+                  />
+                );
+              })}
+
+              {/* Moving background waves */}
+              <div className="absolute inset-0 opacity-10">
+                {[...Array(3)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-full h-full"
+                    style={{
+                      background: `radial-gradient(circle at ${50 + i * 20}% ${30 + i * 25}%, rgba(255,255,255,0.1) 0%, transparent 50%)`,
+                      animation: `float ${3 + i}s ease-in-out infinite`,
+                      animationDelay: `${i * 0.5}s`,
+                    }}
+                  />
+                ))}
+              </div>
             </div>
-            {section.content}
+
+            {/* Parallax content wrapper */}
+            <div
+              className="relative z-10"
+              style={{
+                transform: `translateY(${parallaxOffset * 0.1}px)`,
+                transition: "transform 0.8s cubic-bezier(0.23, 1, 0.32, 1)",
+              }}
+            >
+              {section.content}
+            </div>
+
+            {/* Section-specific background effects */}
+            {index === 0 && (
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {/* Code rain effect for hero section */}
+                {[...Array(10)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute text-green-300/20 font-mono text-xs animate-pulse"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      animationDelay: `${Math.random() * 2}s`,
+                      transform: `rotate(${Math.random() * 360}deg)`,
+                    }}
+                  >
+                    {
+                      ["</>", "{code}", "API", "React", "Java", "Spring"][
+                        Math.floor(Math.random() * 6)
+                      ]
+                    }
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {index === 2 && (
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {/* Tech icons floating for skills section */}
+                {["⚛️", "☕", "🐘", "⚡", "🔧", "📱", "💻", "🚀"].map(
+                  (icon, i) => (
+                    <div
+                      key={i}
+                      className="absolute text-2xl opacity-20 animate-bounce"
+                      style={{
+                        left: `${Math.random() * 90 + 5}%`,
+                        top: `${Math.random() * 90 + 5}%`,
+                        animationDelay: `${i * 0.3}s`,
+                        animationDuration: `${2 + Math.random()}s`,
+                      }}
+                    >
+                      {icon}
+                    </div>
+                  ),
+                )}
+              </div>
+            )}
           </div>
         </section>
       ))}
@@ -505,6 +696,26 @@ const Portfolio: React.FC = () => {
       {isAnimating && (
         <div className="fixed inset-0 bg-black/20 z-30 pointer-events-none" />
       )}
+
+      {/* Mouse follower effect */}
+      <MouseFollower currentSection={currentSection} />
+
+      {/* Scroll effects */}
+      <ScrollEffects
+        isActive={showScrollEffects}
+        sectionIndex={currentSection}
+        direction={lastScrollDirection}
+      />
+
+      {/* Performance Monitor */}
+      <PerformanceMonitor enabled={showPerformanceMonitor} />
+
+      {/* Accessibility Enhancements */}
+      <AccessibilityEnhancer
+        currentSection={currentSection}
+        totalSections={sections.length}
+        sectionTitles={sectionTitles}
+      />
     </div>
   );
 };
