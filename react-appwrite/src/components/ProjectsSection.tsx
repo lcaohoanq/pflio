@@ -61,7 +61,7 @@ const ProjectsSection: React.FC<ProjectsProps> = ({ currentSection }) => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl  mx-auto h-[20%]">
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         {projects.map((project, index) => (
           <div

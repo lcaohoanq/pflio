@@ -50,10 +50,10 @@ const AccessibilityEnhancer: React.FC<AccessibilityEnhancerProps> = ({
       </div>
 
       {/* Accessibility controls */}
-      <div className="fixed bottom-4 left-4 flex flex-col space-y-2 z-50">
+      <div className="fixed bottom-20 left-4 flex flex-col space-y-2 z-50">
         <button
           onClick={toggleHighContrast}
-          className="bg-gray-800 text-white p-2 rounded-full text-xs hover:bg-gray-700 transition-colors"
+          className="bg-gray-800/90 backdrop-blur-sm text-white p-3 rounded-full text-xs hover:bg-gray-700 transition-all duration-300 hover:scale-110 shadow-lg"
           title="Toggle high contrast"
           aria-label="Toggle high contrast mode"
         >
@@ -62,10 +62,13 @@ const AccessibilityEnhancer: React.FC<AccessibilityEnhancerProps> = ({
 
         {reducedMotion && (
           <div
-            className="bg-yellow-600 text-white p-2 rounded text-xs max-w-48"
+            className="bg-yellow-600/90 backdrop-blur-sm text-white p-3 rounded-lg text-xs max-w-48 shadow-lg border border-yellow-500/30"
             role="status"
           >
-            Reduced motion detected
+            <div className="flex items-center space-x-2">
+              <span>⚠️</span>
+              <span>Reduced motion detected</span>
+            </div>
           </div>
         )}
       </div>

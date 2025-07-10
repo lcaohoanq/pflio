@@ -7,13 +7,17 @@ import MouseFollower from "../components/MouseFollower";
 import ScrollEffects from "../components/ScrollEffects";
 import PerformanceMonitor from "../components/PerformanceMonitor";
 import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
+import ThemeSelector from "../components/ThemeSelector";
+import { useTheme } from "../components/ThemeProvider";
 
 const Portfolio: React.FC = () => {
+  const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [showKeyboardHints, setShowKeyboardHints] = useState(false);
+  const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [parallaxOffset, setParallaxOffset] = useState(0);
   const [lastScrollDirection, setLastScrollDirection] = useState<"up" | "down">(
@@ -73,7 +77,10 @@ const Portfolio: React.FC = () => {
             </div>
           </div>
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+            <h1
+              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
+              style={{ color: theme.colors.text }}
+            >
               <span className="inline-block hover:scale-105 transition-transform duration-300">
                 Luu
               </span>{" "}
@@ -84,11 +91,25 @@ const Portfolio: React.FC = () => {
                 Hoang
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed px-4">
+            <p
+              className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed px-4"
+              style={{ color: theme.colors.textSecondary }}
+            >
               Passionate about creating innovative solutions with{" "}
-              <span className="text-green-300 font-semibold">Spring Boot</span>,{" "}
-              <span className="text-blue-300 font-semibold">React</span>, and
-              modern web technologies
+              <span
+                className="font-semibold"
+                style={{ color: theme.colors.accent }}
+              >
+                Spring Boot
+              </span>
+              ,{" "}
+              <span
+                className="font-semibold"
+                style={{ color: theme.colors.primary }}
+              >
+                React
+              </span>
+              , and modern web technologies
             </p>
           </div>
           <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
@@ -127,15 +148,15 @@ const Portfolio: React.FC = () => {
             </a>
           </div>
           {/* Scroll hint */}
-          <div className="mt-12 opacity-70">
+          {/* <div className="mt-12 opacity-70">
             <p className="text-sm text-gray-300 mb-2">Discover more below</p>
             <div className="w-6 h-10 border-2 border-white/50 rounded-full mx-auto flex justify-center">
               <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce"></div>
             </div>
-          </div>
+          </div> */}
         </div>
       ),
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      background: theme.colors.background,
     },
     {
       id: "about",
@@ -145,55 +166,112 @@ const Portfolio: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h2 className="text-4xl font-bold text-white">Who I Am</h2>
-              <p className="text-lg text-gray-300 leading-relaxed">
+              <h2
+                className="text-4xl font-bold"
+                style={{ color: theme.colors.text }}
+              >
+                Who I Am
+              </h2>
+              <p
+                className="text-lg leading-relaxed"
+                style={{ color: theme.colors.textSecondary }}
+              >
                 I'm a dedicated software engineer with a passion for backend
                 development, particularly with Spring Boot. I love creating
                 robust, scalable applications and exploring the latest
                 technologies in web development.
               </p>
-              <p className="text-lg text-gray-300 leading-relaxed">
+              <p
+                className="text-lg leading-relaxed"
+                style={{ color: theme.colors.textSecondary }}
+              >
                 When I'm not coding, you'll find me capturing moments through
                 photography on Unsplash, cycling through scenic routes, or
                 sharing knowledge through my blog "shinbun 新聞".
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-center">
-                <h3 className="text-2xl font-bold text-white">5+</h3>
-                <p className="text-gray-300">Projects</p>
+              <div
+                className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border + "30",
+                }}
+              >
+                <h3
+                  className="text-2xl font-bold"
+                  style={{ color: theme.colors.primary }}
+                >
+                  5+
+                </h3>
+                <p style={{ color: theme.colors.textSecondary }}>Projects</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-center">
-                <h3 className="text-2xl font-bold text-white">3+</h3>
-                <p className="text-gray-300">Years Learning</p>
+              <div
+                className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border + "30",
+                }}
+              >
+                <h3
+                  className="text-2xl font-bold"
+                  style={{ color: theme.colors.primary }}
+                >
+                  3+
+                </h3>
+                <p style={{ color: theme.colors.textSecondary }}>
+                  Years Learning
+                </p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-center">
-                <h3 className="text-2xl font-bold text-white">100+</h3>
-                <p className="text-gray-300">Commits</p>
+              <div
+                className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border + "30",
+                }}
+              >
+                <h3
+                  className="text-2xl font-bold"
+                  style={{ color: theme.colors.primary }}
+                >
+                  100+
+                </h3>
+                <p style={{ color: theme.colors.textSecondary }}>Commits</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-center">
-                <h3 className="text-2xl font-bold text-white">24/7</h3>
-                <p className="text-gray-300">Learning</p>
+              <div
+                className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border + "30",
+                }}
+              >
+                <h3
+                  className="text-2xl font-bold"
+                  style={{ color: theme.colors.primary }}
+                >
+                  24/7
+                </h3>
+                <p style={{ color: theme.colors.textSecondary }}>Learning</p>
               </div>
             </div>
           </div>
         </div>
       ),
-      background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      background: theme.colors.background,
     },
     {
       id: "skills",
       title: "Technical Skills",
       subtitle: "Technologies I Work With",
       content: <SkillsSection currentSection={currentSection} />,
-      background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+      background: theme.colors.background,
     },
     {
       id: "projects",
       title: "Featured Projects",
       subtitle: "Some of My Best Work",
       content: <ProjectsSection currentSection={currentSection} />,
-      background: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+      background: theme.colors.background,
     },
     {
       id: "contact",
@@ -201,42 +279,82 @@ const Portfolio: React.FC = () => {
       subtitle: "Get In Touch",
       content: (
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-xl text-gray-300 mb-8">
+          <p
+            className="text-xl mb-8"
+            style={{ color: theme.colors.textSecondary }}
+          >
             I'm always interested in new opportunities and collaborations. Feel
             free to reach out if you'd like to work together!
           </p>
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="space-y-4">
-              <div className="w-16 h-16 mx-auto bg-white/20 rounded-full flex items-center justify-center">
+              <div
+                className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border + "30",
+                }}
+              >
                 <span className="text-2xl">📧</span>
               </div>
-              <h3 className="text-lg font-semibold text-white">Email</h3>
-              <p className="text-gray-300">lcaohoanq@gmail.com</p>
+              <h3
+                className="text-lg font-semibold"
+                style={{ color: theme.colors.text }}
+              >
+                Email
+              </h3>
+              <p style={{ color: theme.colors.textSecondary }}>
+                lcaohoanq@gmail.com
+              </p>
             </div>
             <div className="space-y-4">
-              <div className="w-16 h-16 mx-auto bg-white/20 rounded-full flex items-center justify-center">
+              <div
+                className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border + "30",
+                }}
+              >
                 <span className="text-2xl">💼</span>
               </div>
-              <h3 className="text-lg font-semibold text-white">LinkedIn</h3>
+              <h3
+                className="text-lg font-semibold"
+                style={{ color: theme.colors.text }}
+              >
+                LinkedIn
+              </h3>
               <a
                 href="https://linkedin.com/in/lcaohoanq"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-300 hover:text-blue-200 transition-colors"
+                className="hover:opacity-80 transition-opacity"
+                style={{ color: theme.colors.primary }}
               >
                 /in/lcaohoanq
               </a>
             </div>
             <div className="space-y-4">
-              <div className="w-16 h-16 mx-auto bg-white/20 rounded-full flex items-center justify-center">
+              <div
+                className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border + "30",
+                }}
+              >
                 <span className="text-2xl">📱</span>
               </div>
-              <h3 className="text-lg font-semibold text-white">Blog</h3>
+              <h3
+                className="text-lg font-semibold"
+                style={{ color: theme.colors.text }}
+              >
+                Blog
+              </h3>
               <a
                 href="https://shinbun.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-300 hover:text-blue-200 transition-colors"
+                className="hover:opacity-80 transition-opacity"
+                style={{ color: theme.colors.primary }}
               >
                 shinbun 新聞
               </a>
@@ -247,7 +365,11 @@ const Portfolio: React.FC = () => {
               href="https://github.com/lcaohoanq"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gray-800 text-white p-4 rounded-full hover:bg-gray-700 transition-colors"
+              className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
+              style={{
+                backgroundColor: theme.colors.surface,
+                borderColor: theme.colors.border + "30",
+              }}
             >
               <img src="/github.png" alt="GitHub" className="w-6 h-6" />
             </a>
@@ -255,7 +377,11 @@ const Portfolio: React.FC = () => {
               href="https://linkedin.com/in/lcaohoanq"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition-colors"
+              className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
+              style={{
+                backgroundColor: theme.colors.surface,
+                borderColor: theme.colors.border + "30",
+              }}
             >
               <img src="/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
             </a>
@@ -263,14 +389,18 @@ const Portfolio: React.FC = () => {
               href="https://unsplash.com/@lcaohoanq"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gray-700 text-white p-4 rounded-full hover:bg-gray-600 transition-colors"
+              className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
+              style={{
+                backgroundColor: theme.colors.surface,
+                borderColor: theme.colors.border + "30",
+              }}
             >
               <img src="/unsplash.png" alt="Unsplash" className="w-6 h-6" />
             </a>
           </div>
         </div>
       ),
-      background: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
+      background: theme.colors.background,
     },
   ];
 
@@ -395,6 +525,11 @@ const Portfolio: React.FC = () => {
 
   const handleWheel = useCallback(
     (e: React.WheelEvent) => {
+      // Allow default zoom behavior when Ctrl key is pressed
+      if (e.ctrlKey) {
+        return;
+      }
+
       e.preventDefault();
       if (isAnimating) return;
 
@@ -420,6 +555,8 @@ const Portfolio: React.FC = () => {
         scrollToSection(currentSection - 1);
       } else if (e.key === "h" || e.key === "H") {
         setShowKeyboardHints(!showKeyboardHints);
+      } else if (e.key === "t" || e.key === "T") {
+        setShowThemeSelector(!showThemeSelector);
       } else if (e.key === "p" || e.key === "P") {
         setShowPerformanceMonitor(!showPerformanceMonitor);
       }
@@ -430,6 +567,7 @@ const Portfolio: React.FC = () => {
       scrollToSection,
       sections.length,
       showKeyboardHints,
+      showThemeSelector,
       showPerformanceMonitor,
     ],
   );
@@ -678,11 +816,30 @@ const Portfolio: React.FC = () => {
         </div>
       )}
 
+      {/* Theme Button */}
+      <div className="fixed top-20 right-4 md:top-20 md:right-8 z-50">
+        <button
+          onClick={() => setShowThemeSelector(!showThemeSelector)}
+          className="backdrop-blur-sm text-white w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 flex items-center justify-center text-sm md:text-base hover:scale-110 border"
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border + "40",
+          }}
+          aria-label="Change theme"
+        >
+          🎨
+        </button>
+      </div>
+
       {/* Help Button */}
       <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50">
         <button
           onClick={() => setShowKeyboardHints(!showKeyboardHints)}
-          className="bg-white/20 backdrop-blur-sm text-white w-10 h-10 md:w-12 md:h-12 rounded-full hover:bg-white/30 transition-all duration-300 flex items-center justify-center text-sm md:text-base hover:scale-110"
+          className="backdrop-blur-sm text-white w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 flex items-center justify-center text-sm md:text-base hover:scale-110 border"
+          style={{
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border + "40",
+          }}
           aria-label="Show keyboard shortcuts"
         >
           ?
@@ -691,6 +848,12 @@ const Portfolio: React.FC = () => {
 
       {/* Keyboard Hints */}
       <KeyboardHints show={showKeyboardHints} />
+
+      {/* Theme Selector */}
+      <ThemeSelector
+        show={showThemeSelector}
+        onClose={() => setShowThemeSelector(false)}
+      />
 
       {/* Loading overlay for transitions */}
       {isAnimating && (
@@ -711,11 +874,11 @@ const Portfolio: React.FC = () => {
       <PerformanceMonitor enabled={showPerformanceMonitor} />
 
       {/* Accessibility Enhancements */}
-      <AccessibilityEnhancer
+      {/* <AccessibilityEnhancer
         currentSection={currentSection}
         totalSections={sections.length}
         sectionTitles={sectionTitles}
-      />
+      /> */}
     </div>
   );
 };
