@@ -627,7 +627,7 @@ const Portfolio: React.FC = () => {
       </div>
 
       {/* Navigation Dots */}
-      <div className="fixed right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-50 space-y-3">
+      <div className="fixed right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-50 gap-3 space-y-3">
         {sections.map((section, index) => (
           <button
             key={index}

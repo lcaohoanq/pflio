@@ -244,7 +244,7 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeVariant>("neon-purple");
+  const [currentTheme, setCurrentTheme] = useState<ThemeVariant>("monochrome");
 
   useEffect(() => {
     // Load theme from localStorage
