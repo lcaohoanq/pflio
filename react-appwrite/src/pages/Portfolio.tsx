@@ -4,6 +4,9 @@ import ProjectsSection from "../components/ProjectsSection";
 import SkillsSection from "../components/SkillsSection";
 // import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
 import { useTheme } from "../components/ThemeProvider";
+import ShinyText from "~/components/ShinyText/ShinyText";
+import CircularGallery from "~/components/CircularGallery/CircularGallery";
+import { settings } from "~/utils/settings";
 
 const Portfolio: React.FC = () => {
   const { theme } = useTheme();
@@ -24,6 +27,7 @@ const Portfolio: React.FC = () => {
   const particlesRef = useRef<HTMLDivElement[]>([]);
 
   const sectionTitles = ["Hero", "About", "Skills", "Projects", "Contact"];
+  const currentSetting = settings.find((e) => e.section === currentSection);
 
   const sections = [
     {
@@ -114,29 +118,7 @@ const Portfolio: React.FC = () => {
               rel="noopener noreferrer"
               className="group bg-white text-gray-900 px-6 py-3 rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 font-medium flex items-center space-x-2"
             >
-              <span>GitHub</span>
-              <span className="group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-            </a>
-            <a
-              href="https://linkedin.com/in/lcaohoanq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 hover:scale-105 font-medium flex items-center space-x-2"
-            >
-              <span>LinkedIn</span>
-              <span className="group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-            </a>
-            <a
-              href="https://shinbun.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition-all duration-300 hover:scale-105 font-medium flex items-center space-x-2"
-            >
-              <span>Blog</span>
+              <span>Contact Me</span>
               <span className="group-hover:translate-x-1 transition-transform">
                 →
               </span>
@@ -158,99 +140,122 @@ const Portfolio: React.FC = () => {
       title: "About Me",
       subtitle: "My Journey & Passion",
       content: (
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h2
-                className="text-4xl font-bold"
-                style={{ color: theme.colors.text }}
-              >
-                Who I Am
-              </h2>
-              <p
-                className="text-lg leading-relaxed"
-                style={{ color: theme.colors.textSecondary }}
-              >
-                I'm a dedicated software engineer with a passion for backend
-                development, particularly with Spring Boot. I love creating
-                robust, scalable applications and exploring the latest
-                technologies in web development.
-              </p>
-              <p
-                className="text-lg leading-relaxed"
-                style={{ color: theme.colors.textSecondary }}
-              >
-                When I'm not coding, you'll find me capturing moments through
-                photography on Unsplash, cycling through scenic routes, or
-                sharing knowledge through my blog "shinbun 新聞".
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div
-                className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                style={{
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border + "30",
-                }}
-              >
-                <h3
-                  className="text-2xl font-bold"
-                  style={{ color: theme.colors.primary }}
+        <>
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <h2
+                  className="text-4xl font-bold"
+                  style={{ color: theme.colors.text }}
                 >
-                  5+
-                </h3>
-                <p style={{ color: theme.colors.textSecondary }}>Projects</p>
-              </div>
-              <div
-                className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                style={{
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border + "30",
-                }}
-              >
-                <h3
-                  className="text-2xl font-bold"
-                  style={{ color: theme.colors.primary }}
+                  Who I Am
+                </h2>
+                <p
+                  className="text-lg leading-relaxed"
+                  style={{ color: theme.colors.textSecondary }}
                 >
-                  3+
-                </h3>
-                <p style={{ color: theme.colors.textSecondary }}>
-                  Years Learning
+                  I'm a dedicated software engineer with a passion for backend
+                  development, particularly with Spring Boot. I love creating
+                  robust, scalable applications and exploring the latest
+                  technologies in web development.
+                </p>
+                <p
+                  className="text-lg leading-relaxed"
+                  style={{ color: theme.colors.textSecondary }}
+                >
+                  When I'm not coding, you'll find me capturing moments through
+                  photography on Unsplash, cycling through scenic routes, or
+                  sharing knowledge through my blog "shinbun 新聞".
                 </p>
               </div>
-              <div
-                className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                style={{
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border + "30",
-                }}
-              >
-                <h3
-                  className="text-2xl font-bold"
-                  style={{ color: theme.colors.primary }}
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div
+                  className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border + "30",
+                  }}
                 >
-                  100+
-                </h3>
-                <p style={{ color: theme.colors.textSecondary }}>Commits</p>
-              </div>
-              <div
-                className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                style={{
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border + "30",
-                }}
-              >
-                <h3
-                  className="text-2xl font-bold"
-                  style={{ color: theme.colors.primary }}
+                  <h3
+                    className="text-2xl font-bold"
+                    style={{ color: theme.colors.primary }}
+                  >
+                    5+
+                  </h3>
+                  <p style={{ color: theme.colors.textSecondary }}>Projects</p>
+                </div>
+                <div
+                  className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border + "30",
+                  }}
                 >
-                  24/7
-                </h3>
-                <p style={{ color: theme.colors.textSecondary }}>Learning</p>
+                  <h3
+                    className="text-2xl font-bold"
+                    style={{ color: theme.colors.primary }}
+                  >
+                    3+
+                  </h3>
+                  <p style={{ color: theme.colors.textSecondary }}>
+                    Years Learning
+                  </p>
+                </div>
+                <div
+                  className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border + "30",
+                  }}
+                >
+                  <h3
+                    className="text-2xl font-bold"
+                    style={{ color: theme.colors.primary }}
+                  >
+                    100+
+                  </h3>
+                  <p style={{ color: theme.colors.textSecondary }}>Commits</p>
+                </div>
+                <div
+                  className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border + "30",
+                  }}
+                >
+                  <h3
+                    className="text-2xl font-bold"
+                    style={{ color: theme.colors.primary }}
+                  >
+                    24/7
+                  </h3>
+                  <p style={{ color: theme.colors.textSecondary }}>Learning</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          {/* Gallery Section - Full width */}
+          <div className="mt-10 relative z-30 w-full">
+            <div
+              className="relative w-full"
+              style={{
+                height: "400px",
+                zIndex: 30,
+              }}
+              onMouseEnter={() => console.log("Gallery container hovered")}
+            >
+              <CircularGallery
+                key={`gallery-${currentSection}`}
+                bend={3}
+                textColor="#ffffff"
+                borderRadius={0.05}
+                scrollEase={0.02}
+              />
+            </div>
+          </div>
+        </>
       ),
       background: theme.colors.background,
     },
@@ -694,15 +699,7 @@ const Portfolio: React.FC = () => {
             </div>
 
             {/* Parallax content wrapper */}
-            <div
-              className="relative z-10"
-              style={{
-                transform: `translateY(${parallaxOffset * 0.1}px)`,
-                transition: "transform 0.8s cubic-bezier(0.23, 1, 0.32, 1)",
-              }}
-            >
-              {section.content}
-            </div>
+            <>{section.content}</>
 
             {/* Section-specific background effects */}
             {index === 0 && (
@@ -756,15 +753,17 @@ const Portfolio: React.FC = () => {
       {/* Scroll Indicator */}
       {currentSection < sections.length - 1 && (
         <div className="fixed bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-50 text-white text-center">
-          <div className="animate-bounce">
-            <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-white rounded-full flex justify-center opacity-80">
-              <div className="w-1 h-2 md:h-3 bg-white rounded-full mt-1 md:mt-2 animate-pulse"></div>
-            </div>
-            <p className="mt-2 text-xs md:text-sm opacity-80">
-              {currentSection === 0
-                ? "Scroll to explore"
-                : "Continue scrolling"}
-            </p>
+          <div className="animate-bounce text-center opacity-80">
+            {currentSetting?.isShowIcon && (
+              <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-white rounded-full flex justify-center">
+                <div className="w-1 h-2 md:h-3 bg-white rounded-full mt-1 md:mt-2 animate-pulse" />
+              </div>
+            )}
+            {currentSetting?.scrollGuideText && (
+              <p className="mt-2 text-xs md:text-sm">
+                {currentSetting.scrollGuideText}
+              </p>
+            )}
           </div>
         </div>
       )}
