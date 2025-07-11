@@ -378,7 +378,6 @@ class Media {
       this.isBefore = this.isAfter = false;
     }
   }
-
   onResize({
     screen,
     viewport,
@@ -394,10 +393,11 @@ class Media {
       }
     }
     this.scale = this.screen.height / 1500;
+    // Increased base dimensions for wider gallery: 900->950 height, 700->1000 width
     this.plane.scale.y =
-      (this.viewport.height * (900 * this.scale)) / this.screen.height;
+      (this.viewport.height * (950 * this.scale)) / this.screen.height;
     this.plane.scale.x =
-      (this.viewport.width * (700 * this.scale)) / this.screen.width;
+      (this.viewport.width * (1280 * this.scale)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [
       this.plane.scale.x,
       this.plane.scale.y,
@@ -657,7 +657,7 @@ export default function CircularGallery({
   bend = 3,
   textColor = "#ffffff",
   borderRadius = 0.05,
-  font = "bold 15px Figtree",
+  font = "bold 30px Figtree",
   scrollSpeed = 2,
   scrollEase = 0.05,
 }: CircularGalleryProps) {

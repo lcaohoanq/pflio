@@ -200,16 +200,25 @@ export const useUnsplash = ({
   };
 };
 
+//when the string too long replace with ...
+
+const shortenString = (str: string) => {
+  const maxLength = 16; // Set maximum length for the string
+  if (str.length > maxLength) {
+    return str.slice(0, maxLength) + "..."; // Append ellipsis if truncated
+  }
+  return str;
+};
+
 // Utility hook to convert Unsplash photos to CircularGallery format
 export const useUnsplashForGallery = (config?: UseUnsplashConfig) => {
   const { photos, loading, error, ...rest } = useUnsplash(config);
 
   const galleryItems = photos.map((photo) => ({
     image: photo.urls.regular, // Use regular size for good balance of quality/performance
-    text:
-      photo.alt_description ||
-      photo.description ||
-      `Photo by ${photo.user.name}`,
+    text: photo.description
+      ? shortenString(photo.description)
+      : shortenString(photo.alt_description || "lch"),
   }));
 
   return {
