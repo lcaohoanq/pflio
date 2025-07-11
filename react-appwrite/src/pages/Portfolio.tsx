@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
 import { animate, stagger } from "animejs";
-import SkillsSection from "../components/SkillsSection";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ProjectsSection from "../components/ProjectsSection";
-import KeyboardHints from "../components/KeyboardHints";
-import MouseFollower from "../components/MouseFollower";
-import ScrollEffects from "../components/ScrollEffects";
-import PerformanceMonitor from "../components/PerformanceMonitor";
+import SkillsSection from "../components/SkillsSection";
 // import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
-import ThemeSelector from "../components/ThemeSelector";
 import { useTheme } from "../components/ThemeProvider";
 
 const Portfolio: React.FC = () => {
@@ -446,8 +441,8 @@ const Portfolio: React.FC = () => {
           translateY: isScrollingDown ? [-20, -80] : [20, 80],
           translateX: isScrollingDown ? [0, -30] : [0, 30],
           scale: [1, 0.8],
-          rotateX: isScrollingDown ? [0, -15] : [0, 15],
-          rotateY: [0, isScrollingDown ? 10 : -10],
+          // rotateX: isScrollingDown ? [0, -15] : [0, 15],
+          // rotateY: [0, isScrollingDown ? 10 : -10],
           duration: 600,
           easing: "easeInQuart",
           delay: stagger(50, { from: isScrollingDown ? "first" : "last" }),
@@ -467,8 +462,8 @@ const Portfolio: React.FC = () => {
               translateY: isScrollingDown ? [60, 0] : [-60, 0],
               translateX: isScrollingDown ? [40, 0] : [-40, 0],
               scale: [0.7, 1.05, 1],
-              rotateX: isScrollingDown ? [20, -5, 0] : [-20, 5, 0],
-              rotateY: [isScrollingDown ? -15 : 15, 0],
+              // rotateX: isScrollingDown ? [20, -5, 0] : [-20, 5, 0],
+              // rotateY: [isScrollingDown ? -15 : 15, 0],
               duration: 1000,
               easing: "easeOutElastic(1, .8)",
               delay: waveDelay,
@@ -497,23 +492,6 @@ const Portfolio: React.FC = () => {
                 delay: stagger(100, { start: 400 }),
               });
             }
-          },
-        });
-
-        // Create screen transition effect
-        const transitionOverlay = document.createElement("div");
-        transitionOverlay.className = "fixed inset-0 z-40 pointer-events-none";
-        transitionOverlay.style.background = `linear-gradient(${
-          isScrollingDown ? "0deg" : "180deg"
-        }, transparent 0%, rgba(0,0,0,0.8) 50%, transparent 100%)`;
-        document.body.appendChild(transitionOverlay);
-
-        animate(transitionOverlay, {
-          opacity: [0, 1, 0],
-          duration: 800,
-          easing: "easeInOutQuart",
-          complete: () => {
-            document.body.removeChild(transitionOverlay);
           },
         });
       } else {
@@ -647,29 +625,6 @@ const Portfolio: React.FC = () => {
           </button>
         ))}
       </div>
-
-      {/* Back to Home Button */}
-      <div className="fixed top-4 md:top-8 left-4 md:left-8 z-50">
-        <a
-          href="/"
-          className="bg-white/20 backdrop-blur-sm text-white px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-white/30 transition-all duration-300 text-sm md:text-base flex items-center space-x-2 hover:scale-105"
-        >
-          <span>←</span>
-          <span className="hidden md:inline">Home</span>
-        </a>
-      </div>
-
-      {/* Section Counter */}
-      <div className="fixed top-4 md:top-8 right-4 md:right-8 z-40 bg-white/20 backdrop-blur-sm text-white px-3 md:px-4 py-2 rounded-full text-sm">
-        <span className="font-mono">
-          {String(currentSection + 1).padStart(2, "0")}
-        </span>
-        <span className="text-white/70 mx-1">/</span>
-        <span className="font-mono text-white/70">
-          {String(sections.length).padStart(2, "0")}
-        </span>
-      </div>
-
       {/* Sections */}
       {sections.map((section, index) => (
         <section
@@ -713,8 +668,7 @@ const Portfolio: React.FC = () => {
                           : shape === "diamond"
                             ? "50% 0"
                             : "0",
-                      transform:
-                        shape === "triangle" ? "rotate(45deg)" : "none",
+                      // transform:  shape === "triangle" ? "rotate(45deg)" : "none",
                       animationDelay: `${Math.random() * 2}s`,
                       animationDuration: `${2 + Math.random() * 3}s`,
                       filter: `hue-rotate(${index * 60}deg)`,
@@ -774,7 +728,6 @@ const Portfolio: React.FC = () => {
                 ))}
               </div>
             )}
-
             {index === 2 && (
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {/* Tech icons floating for skills section */}
@@ -815,70 +768,6 @@ const Portfolio: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Theme Button */}
-      <div className="fixed top-20 right-4 md:top-20 md:right-8 z-50">
-        <button
-          onClick={() => setShowThemeSelector(!showThemeSelector)}
-          className="backdrop-blur-sm text-white w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 flex items-center justify-center text-sm md:text-base hover:scale-110 border"
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderColor: theme.colors.border + "40",
-          }}
-          aria-label="Change theme"
-        >
-          🎨
-        </button>
-      </div>
-
-      {/* Help Button */}
-      <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50">
-        <button
-          onClick={() => setShowKeyboardHints(!showKeyboardHints)}
-          className="backdrop-blur-sm text-white w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 flex items-center justify-center text-sm md:text-base hover:scale-110 border"
-          style={{
-            backgroundColor: theme.colors.surface,
-            borderColor: theme.colors.border + "40",
-          }}
-          aria-label="Show keyboard shortcuts"
-        >
-          ?
-        </button>
-      </div>
-
-      {/* Keyboard Hints */}
-      <KeyboardHints show={showKeyboardHints} />
-
-      {/* Theme Selector */}
-      <ThemeSelector
-        show={showThemeSelector}
-        onClose={() => setShowThemeSelector(false)}
-      />
-
-      {/* Loading overlay for transitions */}
-      {isAnimating && (
-        <div className="fixed inset-0 bg-black/20 z-30 pointer-events-none" />
-      )}
-
-      {/* Mouse follower effect */}
-      <MouseFollower currentSection={currentSection} />
-
-      {/* Scroll effects */}
-      <ScrollEffects
-        isActive={showScrollEffects}
-        sectionIndex={currentSection}
-        direction={lastScrollDirection}
-      />
-
-      {/* Performance Monitor */}
-      <PerformanceMonitor enabled={showPerformanceMonitor} />
-
-      {/* Accessibility Enhancements */}
-      {/* <AccessibilityEnhancer
-        currentSection={currentSection}
-        totalSections={sections.length}
-        sectionTitles={sectionTitles}
-      /> */}
     </div>
   );
 };

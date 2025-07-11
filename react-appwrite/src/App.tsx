@@ -9,8 +9,8 @@ function App() {
     <ThemeProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/portfolio" element={<Portfolio />} />
+          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/" element={<Portfolio />} />
         </Routes>
       </Router>
     </ThemeProvider>
