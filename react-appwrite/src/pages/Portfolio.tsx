@@ -6,10 +6,27 @@ import SkillsSection from "../components/SkillsSection";
 import { useTheme } from "../components/ThemeProvider";
 import ShinyText from "~/components/ShinyText/ShinyText";
 import CircularGallery from "~/components/CircularGallery/CircularGallery";
+import { useUnsplashForGallery } from "~/hooks/useUnsplash";
 import { settings } from "~/utils/settings";
 
 const Portfolio: React.FC = () => {
   const { theme } = useTheme();
+
+  // Unsplash integration for gallery
+  const {
+    items: unsplashItems,
+    loading: unsplashLoading,
+    error: unsplashError,
+    isSuccess: unsplashSuccess,
+    refetch: refetchUnsplash,
+  } = useUnsplashForGallery({
+    username: "lcaohoanq",
+    perPage: 12,
+    enabled: true,
+    cacheTime: 10 * 60 * 1000, // 10 minutes cache
+    orderBy: "views", // Sort by most viewed (likes) in descending order
+  });
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -25,7 +42,6 @@ const Portfolio: React.FC = () => {
   const [showPerformanceMonitor, setShowPerformanceMonitor] = useState(false);
   const sectionsRef = useRef<HTMLElement[]>([]);
   const particlesRef = useRef<HTMLDivElement[]>([]);
-
   const sectionTitles = ["Hero", "About", "Skills", "Projects", "Contact"];
   const currentSetting = settings.find((e) => e.section === currentSection);
 
@@ -235,7 +251,7 @@ const Portfolio: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>{" "}
           {/* Gallery Section - Full width */}
           <div className="mt-10 relative z-30 w-full">
             <div
@@ -244,10 +260,15 @@ const Portfolio: React.FC = () => {
                 height: "400px",
                 zIndex: 30,
               }}
-              onMouseEnter={() => console.log("Gallery container hovered")}
             >
+              {/* CircularGallery with Unsplash or fallback items */}
               <CircularGallery
-                key={`gallery-${currentSection}`}
+                key={`gallery-${currentSection}-${unsplashSuccess ? "unsplash" : "default"}`}
+                items={
+                  unsplashSuccess && unsplashItems.length > 0
+                    ? unsplashItems
+                    : undefined
+                }
                 bend={3}
                 textColor="#ffffff"
                 borderRadius={0.05}
@@ -505,9 +526,8 @@ const Portfolio: React.FC = () => {
     },
     [currentSection, isAnimating, sections.length],
   );
-
   const handleWheel = useCallback(
-    (e: React.WheelEvent) => {
+    (e: WheelEvent) => {
       // Allow default zoom behavior when Ctrl key is pressed
       if (e.ctrlKey) {
         return;
@@ -578,11 +598,24 @@ const Portfolio: React.FC = () => {
     }
     setTouchStart(null);
   };
-
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
+
+  useEffect(() => {
+    // Add wheel event listener with preventDefault capability
+    if (containerRef.current) {
+      containerRef.current.addEventListener("wheel", handleWheel, {
+        passive: false,
+      });
+      return () => {
+        if (containerRef.current) {
+          containerRef.current.removeEventListener("wheel", handleWheel);
+        }
+      };
+    }
+  }, [handleWheel]);
 
   useEffect(() => {
     if (showScrollEffects) {
@@ -590,11 +623,9 @@ const Portfolio: React.FC = () => {
       return () => clearTimeout(timer);
     }
   }, [showScrollEffects]);
-
   return (
     <div
       className="relative h-screen w-full overflow-hidden select-none"
-      onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       ref={containerRef}
@@ -661,7 +692,7 @@ const Portfolio: React.FC = () => {
                 return (
                   <div
                     key={i}
-                    className={`absolute bg-white/20 animate-pulse particle-${shape}`}
+                    className={`absolute animate-pulse particle-${shape}`}
                     style={{
                       left: `${Math.random() * 100}%`,
                       top: `${Math.random() * 100}%`,
@@ -681,21 +712,6 @@ const Portfolio: React.FC = () => {
                   />
                 );
               })}
-
-              {/* Moving background waves */}
-              <div className="absolute inset-0 opacity-10">
-                {[...Array(3)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-full h-full"
-                    style={{
-                      background: `radial-gradient(circle at ${50 + i * 20}% ${30 + i * 25}%, rgba(255,255,255,0.1) 0%, transparent 50%)`,
-                      animation: `float ${3 + i}s ease-in-out infinite`,
-                      animationDelay: `${i * 0.5}s`,
-                    }}
-                  />
-                ))}
-              </div>
             </div>
 
             {/* Parallax content wrapper */}
