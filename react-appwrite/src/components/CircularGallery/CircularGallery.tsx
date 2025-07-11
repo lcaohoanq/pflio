@@ -7,7 +7,7 @@ import {
   Texture,
   Transform,
 } from "ogl";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { defaultImageItems } from "~/utils/images";
 
 type GL = Renderer["gl"];
@@ -500,7 +500,6 @@ class App {
       widthSegments: 100,
     });
   }
-
   createMedias(
     items: { image: string; text: string }[] | undefined,
     bend: number = 1,
@@ -510,6 +509,13 @@ class App {
   ) {
     const defaultItems = defaultImageItems;
     const galleryItems = items && items.length ? items : defaultItems;
+
+    console.log("App.createMedias: Using", {
+      source: items && items.length ? "Unsplash items" : "Default items",
+      itemsLength: galleryItems.length,
+      firstItem: galleryItems[0],
+    });
+
     this.mediasImages = galleryItems.concat(galleryItems);
     this.medias = this.mediasImages.map((data, index) => {
       return new Media({
@@ -529,6 +535,33 @@ class App {
         font,
       });
     });
+  }
+  // Method to update media items without destroying the app
+  updateMedias(
+    items: { image: string; text: string }[] | undefined,
+    bend: number = 1,
+    textColor: string = "#ffffff",
+    borderRadius: number = 0,
+    font: string = "bold 30px Figtree",
+  ) {
+    console.log("App.updateMedias: Updating with", {
+      itemsLength: items?.length || 0,
+      items: items ? "Unsplash data" : "Default data",
+      firstItem: items?.[0],
+    });
+
+    // Clean up existing medias
+    this.medias.forEach((media) => {
+      if (media.plane && media.plane.parent) {
+        media.plane.parent.removeChild(media.plane);
+      }
+    });
+    this.medias = [];
+
+    // Create new medias
+    this.createMedias(items, bend, textColor, borderRadius, font);
+
+    console.log("App.updateMedias: Created", this.medias.length, "media items");
   }
 
   onTouchDown(e: MouseEvent | TouchEvent) {
@@ -662,25 +695,87 @@ export default function CircularGallery({
   scrollEase = 0.05,
 }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const appRef = useRef<App | null>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  // Initialize the app only once
   useEffect(() => {
     if (!containerRef.current) return;
-    const app = new App(containerRef.current, {
-      items,
-      bend,
-      textColor,
-      borderRadius,
-      font,
-      scrollSpeed,
-      scrollEase,
-    });
-    return () => {
-      app.destroy();
+
+    const initializeApp = () => {
+      if (containerRef.current && !appRef.current) {
+        const { clientWidth, clientHeight } = containerRef.current; // Wait for container to have proper dimensions
+        if (clientWidth > 0 && clientHeight > 0) {
+          try {
+            // Always initialize with undefined items - let updateMedias handle the real data
+            appRef.current = new App(containerRef.current, {
+              items: undefined, // Force use of defaults initially
+              bend,
+              textColor,
+              borderRadius,
+              font,
+              scrollSpeed,
+              scrollEase,
+            });
+            setIsReady(true);
+            console.log(
+              "CircularGallery: App initialized with default items, will update with real data",
+            );
+          } catch (error) {
+            console.error("Failed to initialize CircularGallery:", error);
+            // Retry after a short delay
+            setTimeout(initializeApp, 100);
+          }
+        } else {
+          // Container not ready, retry next frame
+          requestAnimationFrame(initializeApp);
+        }
+      }
     };
-  }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase]);
+
+    initializeApp();
+
+    return () => {
+      if (appRef.current) {
+        appRef.current.destroy();
+        appRef.current = null;
+        setIsReady(false);
+      }
+    };
+  }, []); // Empty dependency array - initialize only once  // Handle prop updates without recreating the app
+  useEffect(() => {
+    if (appRef.current && isReady) {
+      // Always update medias when any prop changes, even if items is undefined
+      console.log("CircularGallery: Updating medias with items:", {
+        items: items ? `${items.length} items` : "undefined (using defaults)",
+        firstItem: items?.[0],
+        bend,
+        textColor,
+        borderRadius,
+        font,
+      });
+      appRef.current.updateMedias(items, bend, textColor, borderRadius, font);
+    }
+  }, [
+    items,
+    bend,
+    textColor,
+    borderRadius,
+    font,
+    scrollSpeed,
+    scrollEase,
+    isReady,
+  ]);
+
   return (
     <div
       className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing"
       ref={containerRef}
+      style={{
+        opacity: isReady ? 1 : 0,
+        transition: "opacity 0.3s ease-in-out",
+        minHeight: "400px",
+      }}
     />
   );
 }

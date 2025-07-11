@@ -1,5 +1,11 @@
 import { animate, stagger } from "animejs";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import ProjectsSection from "../components/ProjectsSection";
 import SkillsSection from "../components/SkillsSection";
 // import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
@@ -11,7 +17,6 @@ import { settings } from "~/utils/settings";
 
 const Portfolio: React.FC = () => {
   const { theme } = useTheme();
-
   // Unsplash integration for gallery
   const {
     items: unsplashItems,
@@ -26,6 +31,31 @@ const Portfolio: React.FC = () => {
     cacheTime: 10 * 60 * 1000, // 10 minutes cache
     orderBy: "views", // Sort by most viewed (likes) in descending order
   });
+  // Debug Unsplash data
+  useEffect(() => {
+    console.log("Portfolio: Unsplash state:", {
+      loading: unsplashLoading,
+      success: unsplashSuccess,
+      error: unsplashError,
+      itemsLength: unsplashItems?.length || 0,
+      items: unsplashItems?.slice(0, 3), // Log first 3 items for more detail
+    });
+  }, [unsplashLoading, unsplashSuccess, unsplashError, unsplashItems]);
+  // Prepare gallery items - always pass items, even if empty array
+  const galleryItems = useMemo(() => {
+    if (unsplashSuccess && unsplashItems.length > 0) {
+      console.log(
+        "✅ Portfolio: Using Unsplash items for gallery:",
+        unsplashItems.length,
+        "items",
+      );
+      return unsplashItems;
+    }
+    console.log(
+      "⏳ Portfolio: Unsplash not ready, gallery will use defaults initially",
+    );
+    return undefined;
+  }, [unsplashSuccess, unsplashItems]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
@@ -45,385 +75,388 @@ const Portfolio: React.FC = () => {
   const sectionTitles = ["Hero", "About", "Skills", "Projects", "Contact"];
   const currentSetting = settings.find((e) => e.section === currentSection);
 
-  const sections = [
-    {
-      id: "hero",
-      title: "Welcome to My Portfolio",
-      subtitle: "Software Engineer & Backend Developer",
-      content: (
-        <div className="text-center space-y-6 md:space-y-8">
-          <div className="relative">
-            <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full overflow-hidden border-4 border-white shadow-2xl relative z-10 hover:shadow-3xl transition-all duration-500 hover:scale-105 magnetic-hover">
-              <img
-                src="https://avatars.githubusercontent.com/u/136492579?v=4"
-                alt="Profile"
-                className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-              />
-              {/* Glowing ring effect */}
-              <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-pulse"></div>
-            </div>
-            {/* Enhanced floating circles animation */}
-            <div className="absolute inset-0 -z-10">
-              {[...Array(8)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute w-3 h-3 md:w-4 md:h-4 bg-white/20 rounded-full animate-pulse hover:bg-white/40 transition-colors"
-                  style={{
-                    left: `${30 + Math.sin((i * Math.PI) / 4) * 80}%`,
-                    top: `${50 + Math.cos((i * Math.PI) / 4) * 40}%`,
-                    animationDelay: `${i * 0.3}s`,
-                    animationDuration: `${2 + Math.random()}s`,
-                    filter: `hue-rotate(${i * 45}deg)`,
-                  }}
+  const sections = useMemo(
+    () => [
+      {
+        id: "hero",
+        title: "Welcome to My Portfolio",
+        subtitle: "Software Engineer & Backend Developer",
+        content: (
+          <div className="text-center space-y-6 md:space-y-8">
+            <div className="relative">
+              <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full overflow-hidden border-4 border-white shadow-2xl relative z-10 hover:shadow-3xl transition-all duration-500 hover:scale-105 magnetic-hover">
+                <img
+                  src="https://avatars.githubusercontent.com/u/136492579?v=4"
+                  alt="Profile"
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                 />
-              ))}
-              {/* Orbiting elements */}
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={`orbit-${i}`}
-                  className="absolute w-1 h-1 bg-blue-300/60 rounded-full"
-                  style={{
-                    left: `${50 + Math.sin((Date.now() / 1000 + i * 2) * 0.5) * 60}%`,
-                    top: `${50 + Math.cos((Date.now() / 1000 + i * 2) * 0.5) * 30}%`,
-                    animation: `orbit ${3 + i}s linear infinite`,
-                  }}
-                />
-              ))}
+                {/* Glowing ring effect */}
+                <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-pulse"></div>
+              </div>
+              {/* Enhanced floating circles animation */}
+              <div className="absolute inset-0 -z-10">
+                {[...Array(8)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-3 h-3 md:w-4 md:h-4 bg-white/20 rounded-full animate-pulse hover:bg-white/40 transition-colors"
+                    style={{
+                      left: `${30 + Math.sin((i * Math.PI) / 4) * 80}%`,
+                      top: `${50 + Math.cos((i * Math.PI) / 4) * 40}%`,
+                      animationDelay: `${i * 0.3}s`,
+                      animationDuration: `${2 + Math.random()}s`,
+                      filter: `hue-rotate(${i * 45}deg)`,
+                    }}
+                  />
+                ))}
+                {/* Orbiting elements */}
+                {[...Array(3)].map((_, i) => (
+                  <div
+                    key={`orbit-${i}`}
+                    className="absolute w-1 h-1 bg-blue-300/60 rounded-full"
+                    style={{
+                      left: `${50 + Math.sin((Date.now() / 1000 + i * 2) * 0.5) * 60}%`,
+                      top: `${50 + Math.cos((Date.now() / 1000 + i * 2) * 0.5) * 30}%`,
+                      animation: `orbit ${3 + i}s linear infinite`,
+                    }}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="space-y-4">
-            <h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
-              style={{ color: theme.colors.text }}
-            >
-              <span className="inline-block hover:scale-105 transition-transform duration-300">
-                Luu
-              </span>{" "}
-              <span className="inline-block hover:scale-105 transition-transform duration-300">
-                Cao
-              </span>{" "}
-              <span className="inline-block hover:scale-105 transition-transform duration-300">
-                Hoang
-              </span>
-            </h1>
-            <p
-              className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed px-4"
-              style={{ color: theme.colors.textSecondary }}
-            >
-              Passionate about creating innovative solutions with{" "}
-              <span
-                className="font-semibold"
-                style={{ color: theme.colors.accent }}
+            <div className="space-y-4">
+              <h1
+                className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
+                style={{ color: theme.colors.text }}
               >
-                Spring Boot
-              </span>
-              ,{" "}
-              <span
-                className="font-semibold"
-                style={{ color: theme.colors.primary }}
+                <span className="inline-block hover:scale-105 transition-transform duration-300">
+                  Luu
+                </span>{" "}
+                <span className="inline-block hover:scale-105 transition-transform duration-300">
+                  Cao
+                </span>{" "}
+                <span className="inline-block hover:scale-105 transition-transform duration-300">
+                  Hoang
+                </span>
+              </h1>
+              <p
+                className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed px-4"
+                style={{ color: theme.colors.textSecondary }}
               >
-                React
-              </span>
-              , and modern web technologies
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
-            <a
-              href="https://github.com/lcaohoanq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-white text-gray-900 px-6 py-3 rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 font-medium flex items-center space-x-2"
-            >
-              <span>Contact Me</span>
-              <span className="group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-            </a>
-          </div>
-          {/* Scroll hint */}
-          {/* <div className="mt-12 opacity-70">
+                Passionate about creating innovative solutions with{" "}
+                <span
+                  className="font-semibold"
+                  style={{ color: theme.colors.accent }}
+                >
+                  Spring Boot
+                </span>
+                ,{" "}
+                <span
+                  className="font-semibold"
+                  style={{ color: theme.colors.primary }}
+                >
+                  React
+                </span>
+                , and modern web technologies
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
+              <a
+                href="https://github.com/lcaohoanq"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-white text-gray-900 px-6 py-3 rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 font-medium flex items-center space-x-2"
+              >
+                <span>Contact Me</span>
+                <span className="group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
+              </a>
+            </div>
+            {/* Scroll hint */}
+            {/* <div className="mt-12 opacity-70">
             <p className="text-sm text-gray-300 mb-2">Discover more below</p>
             <div className="w-6 h-10 border-2 border-white/50 rounded-full mx-auto flex justify-center">
               <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce"></div>
             </div>
           </div> */}
-        </div>
-      ),
-      background: theme.colors.background,
-    },
-    {
-      id: "about",
-      title: "About Me",
-      subtitle: "My Journey & Passion",
-      content: (
-        <>
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
-                <h2
-                  className="text-4xl font-bold"
-                  style={{ color: theme.colors.text }}
-                >
-                  Who I Am
-                </h2>
-                <p
-                  className="text-lg leading-relaxed"
-                  style={{ color: theme.colors.textSecondary }}
-                >
-                  I'm a dedicated software engineer with a passion for backend
-                  development, particularly with Spring Boot. I love creating
-                  robust, scalable applications and exploring the latest
-                  technologies in web development.
-                </p>
-                <p
-                  className="text-lg leading-relaxed"
-                  style={{ color: theme.colors.textSecondary }}
-                >
-                  When I'm not coding, you'll find me capturing moments through
-                  photography on Unsplash, cycling through scenic routes, or
-                  sharing knowledge through my blog "shinbun 新聞".
-                </p>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div
-                  className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                  style={{
-                    backgroundColor: theme.colors.surface,
-                    borderColor: theme.colors.border + "30",
-                  }}
-                >
-                  <h3
-                    className="text-2xl font-bold"
-                    style={{ color: theme.colors.primary }}
+          </div>
+        ),
+        background: theme.colors.background,
+      },
+      {
+        id: "about",
+        title: "About Me",
+        subtitle: "My Journey & Passion",
+        content: (
+          <>
+            <div className="max-w-4xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                  <h2
+                    className="text-4xl font-bold"
+                    style={{ color: theme.colors.text }}
                   >
-                    5+
-                  </h3>
-                  <p style={{ color: theme.colors.textSecondary }}>Projects</p>
-                </div>
-                <div
-                  className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                  style={{
-                    backgroundColor: theme.colors.surface,
-                    borderColor: theme.colors.border + "30",
-                  }}
-                >
-                  <h3
-                    className="text-2xl font-bold"
-                    style={{ color: theme.colors.primary }}
+                    Who I Am
+                  </h2>
+                  <p
+                    className="text-lg leading-relaxed"
+                    style={{ color: theme.colors.textSecondary }}
                   >
-                    3+
-                  </h3>
-                  <p style={{ color: theme.colors.textSecondary }}>
-                    Years Learning
+                    I'm a dedicated software engineer with a passion for backend
+                    development, particularly with Spring Boot. I love creating
+                    robust, scalable applications and exploring the latest
+                    technologies in web development.
+                  </p>
+                  <p
+                    className="text-lg leading-relaxed"
+                    style={{ color: theme.colors.textSecondary }}
+                  >
+                    When I'm not coding, you'll find me capturing moments
+                    through photography on Unsplash, cycling through scenic
+                    routes, or sharing knowledge through my blog "shinbun 新聞".
                   </p>
                 </div>
-                <div
-                  className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                  style={{
-                    backgroundColor: theme.colors.surface,
-                    borderColor: theme.colors.border + "30",
-                  }}
-                >
-                  <h3
-                    className="text-2xl font-bold"
-                    style={{ color: theme.colors.primary }}
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div
+                    className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                    style={{
+                      backgroundColor: theme.colors.surface,
+                      borderColor: theme.colors.border + "30",
+                    }}
                   >
-                    100+
-                  </h3>
-                  <p style={{ color: theme.colors.textSecondary }}>Commits</p>
-                </div>
-                <div
-                  className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                  style={{
-                    backgroundColor: theme.colors.surface,
-                    borderColor: theme.colors.border + "30",
-                  }}
-                >
-                  <h3
-                    className="text-2xl font-bold"
-                    style={{ color: theme.colors.primary }}
+                    <h3
+                      className="text-2xl font-bold"
+                      style={{ color: theme.colors.primary }}
+                    >
+                      5+
+                    </h3>
+                    <p style={{ color: theme.colors.textSecondary }}>
+                      Projects
+                    </p>
+                  </div>
+                  <div
+                    className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                    style={{
+                      backgroundColor: theme.colors.surface,
+                      borderColor: theme.colors.border + "30",
+                    }}
                   >
-                    24/7
-                  </h3>
-                  <p style={{ color: theme.colors.textSecondary }}>Learning</p>
+                    <h3
+                      className="text-2xl font-bold"
+                      style={{ color: theme.colors.primary }}
+                    >
+                      3+
+                    </h3>
+                    <p style={{ color: theme.colors.textSecondary }}>
+                      Years Learning
+                    </p>
+                  </div>
+                  <div
+                    className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                    style={{
+                      backgroundColor: theme.colors.surface,
+                      borderColor: theme.colors.border + "30",
+                    }}
+                  >
+                    <h3
+                      className="text-2xl font-bold"
+                      style={{ color: theme.colors.primary }}
+                    >
+                      100+
+                    </h3>
+                    <p style={{ color: theme.colors.textSecondary }}>Commits</p>
+                  </div>
+                  <div
+                    className="backdrop-blur-sm rounded-lg p-6 text-center border"
+                    style={{
+                      backgroundColor: theme.colors.surface,
+                      borderColor: theme.colors.border + "30",
+                    }}
+                  >
+                    <h3
+                      className="text-2xl font-bold"
+                      style={{ color: theme.colors.primary }}
+                    >
+                      24/7
+                    </h3>
+                    <p style={{ color: theme.colors.textSecondary }}>
+                      Learning
+                    </p>
+                  </div>
                 </div>
               </div>
+            </div>{" "}
+            {/* Gallery Section - Full width */}
+            <div className="mt-10 relative z-30 w-full">
+              <div
+                className="relative w-full"
+                style={{
+                  height: "400px",
+                  zIndex: 30,
+                }}
+              >
+                {" "}
+                {/* CircularGallery with Unsplash or fallback items */}
+                <CircularGallery
+                  items={galleryItems}
+                  bend={3}
+                  textColor="#ffffff"
+                  borderRadius={0.05}
+                  scrollEase={0.02}
+                />
+              </div>
             </div>
-          </div>{" "}
-          {/* Gallery Section - Full width */}
-          <div className="mt-10 relative z-30 w-full">
-            <div
-              className="relative w-full"
-              style={{
-                height: "400px",
-                zIndex: 30,
-              }}
+          </>
+        ),
+        background: theme.colors.background,
+      },
+      {
+        id: "skills",
+        title: "Technical Skills",
+        subtitle: "Technologies I Work With",
+        content: <SkillsSection currentSection={currentSection} />,
+        background: theme.colors.background,
+      },
+      {
+        id: "projects",
+        title: "Featured Projects",
+        subtitle: "Some of My Best Work",
+        content: <ProjectsSection currentSection={currentSection} />,
+        background: theme.colors.background,
+      },
+      {
+        id: "contact",
+        title: "Let's Connect",
+        subtitle: "Get In Touch",
+        content: (
+          <div className="max-w-4xl mx-auto text-center">
+            <p
+              className="text-xl mb-8"
+              style={{ color: theme.colors.textSecondary }}
             >
-              {/* CircularGallery with Unsplash or fallback items */}
-              <CircularGallery
-                key={`gallery-${currentSection}-${unsplashSuccess ? "unsplash" : "default"}`}
-                items={
-                  unsplashSuccess && unsplashItems.length > 0
-                    ? unsplashItems
-                    : undefined
-                }
-                bend={3}
-                textColor="#ffffff"
-                borderRadius={0.05}
-                scrollEase={0.02}
-              />
+              I'm always interested in new opportunities and collaborations.
+              Feel free to reach out if you'd like to work together!
+            </p>
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="space-y-4">
+                <div
+                  className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border + "30",
+                  }}
+                >
+                  <span className="text-2xl">📧</span>
+                </div>
+                <h3
+                  className="text-lg font-semibold"
+                  style={{ color: theme.colors.text }}
+                >
+                  Email
+                </h3>
+                <p style={{ color: theme.colors.textSecondary }}>
+                  lcaohoanq@gmail.com
+                </p>
+              </div>
+              <div className="space-y-4">
+                <div
+                  className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border + "30",
+                  }}
+                >
+                  <span className="text-2xl">💼</span>
+                </div>
+                <h3
+                  className="text-lg font-semibold"
+                  style={{ color: theme.colors.text }}
+                >
+                  LinkedIn
+                </h3>
+                <a
+                  href="https://linkedin.com/in/lcaohoanq"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-80 transition-opacity"
+                  style={{ color: theme.colors.primary }}
+                >
+                  /in/lcaohoanq
+                </a>
+              </div>
+              <div className="space-y-4">
+                <div
+                  className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border + "30",
+                  }}
+                >
+                  <span className="text-2xl">📱</span>
+                </div>
+                <h3
+                  className="text-lg font-semibold"
+                  style={{ color: theme.colors.text }}
+                >
+                  Blog
+                </h3>
+                <a
+                  href="https://shinbun.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-80 transition-opacity"
+                  style={{ color: theme.colors.primary }}
+                >
+                  shinbun 新聞
+                </a>
+              </div>
             </div>
-          </div>
-        </>
-      ),
-      background: theme.colors.background,
-    },
-    {
-      id: "skills",
-      title: "Technical Skills",
-      subtitle: "Technologies I Work With",
-      content: <SkillsSection currentSection={currentSection} />,
-      background: theme.colors.background,
-    },
-    {
-      id: "projects",
-      title: "Featured Projects",
-      subtitle: "Some of My Best Work",
-      content: <ProjectsSection currentSection={currentSection} />,
-      background: theme.colors.background,
-    },
-    {
-      id: "contact",
-      title: "Let's Connect",
-      subtitle: "Get In Touch",
-      content: (
-        <div className="max-w-4xl mx-auto text-center">
-          <p
-            className="text-xl mb-8"
-            style={{ color: theme.colors.textSecondary }}
-          >
-            I'm always interested in new opportunities and collaborations. Feel
-            free to reach out if you'd like to work together!
-          </p>
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="space-y-4">
-              <div
-                className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
+            <div className="flex justify-center space-x-6">
+              <a
+                href="https://github.com/lcaohoanq"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
                 style={{
                   backgroundColor: theme.colors.surface,
                   borderColor: theme.colors.border + "30",
                 }}
               >
-                <span className="text-2xl">📧</span>
-              </div>
-              <h3
-                className="text-lg font-semibold"
-                style={{ color: theme.colors.text }}
-              >
-                Email
-              </h3>
-              <p style={{ color: theme.colors.textSecondary }}>
-                lcaohoanq@gmail.com
-              </p>
-            </div>
-            <div className="space-y-4">
-              <div
-                className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
-                style={{
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border + "30",
-                }}
-              >
-                <span className="text-2xl">💼</span>
-              </div>
-              <h3
-                className="text-lg font-semibold"
-                style={{ color: theme.colors.text }}
-              >
-                LinkedIn
-              </h3>
+                <img src="/github.png" alt="GitHub" className="w-6 h-6" />
+              </a>
               <a
                 href="https://linkedin.com/in/lcaohoanq"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:opacity-80 transition-opacity"
-                style={{ color: theme.colors.primary }}
-              >
-                /in/lcaohoanq
-              </a>
-            </div>
-            <div className="space-y-4">
-              <div
-                className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
+                className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
                 style={{
                   backgroundColor: theme.colors.surface,
                   borderColor: theme.colors.border + "30",
                 }}
               >
-                <span className="text-2xl">📱</span>
-              </div>
-              <h3
-                className="text-lg font-semibold"
-                style={{ color: theme.colors.text }}
-              >
-                Blog
-              </h3>
+                <img src="/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
+              </a>
               <a
-                href="https://shinbun.vercel.app/"
+                href="https://unsplash.com/@lcaohoanq"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:opacity-80 transition-opacity"
-                style={{ color: theme.colors.primary }}
+                className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.border + "30",
+                }}
               >
-                shinbun 新聞
+                <img src="/unsplash.png" alt="Unsplash" className="w-6 h-6" />
               </a>
             </div>
           </div>
-          <div className="flex justify-center space-x-6">
-            <a
-              href="https://github.com/lcaohoanq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
-              style={{
-                backgroundColor: theme.colors.surface,
-                borderColor: theme.colors.border + "30",
-              }}
-            >
-              <img src="/github.png" alt="GitHub" className="w-6 h-6" />
-            </a>
-            <a
-              href="https://linkedin.com/in/lcaohoanq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
-              style={{
-                backgroundColor: theme.colors.surface,
-                borderColor: theme.colors.border + "30",
-              }}
-            >
-              <img src="/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
-            </a>
-            <a
-              href="https://unsplash.com/@lcaohoanq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
-              style={{
-                backgroundColor: theme.colors.surface,
-                borderColor: theme.colors.border + "30",
-              }}
-            >
-              <img src="/unsplash.png" alt="Unsplash" className="w-6 h-6" />
-            </a>
-          </div>
-        </div>
-      ),
-      background: theme.colors.background,
-    },
-  ];
+        ),
+        background: theme.colors.background,
+      },
+    ],
+    [theme.colors],
+  );
 
   useEffect(() => {
     // Initialize sections animation
