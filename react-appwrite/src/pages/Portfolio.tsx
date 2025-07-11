@@ -30,20 +30,29 @@ const Portfolio: React.FC = () => {
     enabled: true,
     cacheTime: 10 * 60 * 1000, // 10 minutes cache
     orderBy: "views", // Sort by most viewed (likes) in descending order
-  });
-  // Debug Unsplash data
+  }); // Debug Unsplash data
   useEffect(() => {
-    console.log("Portfolio: Unsplash state:", {
+    console.log("🔍 Portfolio: Unsplash state:", {
       loading: unsplashLoading,
       success: unsplashSuccess,
       error: unsplashError,
       itemsLength: unsplashItems?.length || 0,
       items: unsplashItems?.slice(0, 3), // Log first 3 items for more detail
+      hasItems: !!unsplashItems && unsplashItems.length > 0,
+      condition: unsplashSuccess && unsplashItems && unsplashItems.length > 0,
     });
   }, [unsplashLoading, unsplashSuccess, unsplashError, unsplashItems]);
+
   // Prepare gallery items - always pass items, even if empty array
   const galleryItems = useMemo(() => {
-    if (unsplashSuccess && unsplashItems.length > 0) {
+    console.log("🎯 Portfolio galleryItems memoization:", {
+      unsplashSuccess,
+      itemsExists: !!unsplashItems,
+      itemsLength: unsplashItems?.length || 0,
+      condition: unsplashSuccess && unsplashItems && unsplashItems.length > 0,
+    });
+
+    if (unsplashSuccess && unsplashItems && unsplashItems.length > 0) {
       console.log(
         "✅ Portfolio: Using Unsplash items for gallery:",
         unsplashItems.length,

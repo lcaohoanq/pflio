@@ -697,19 +697,19 @@ export default function CircularGallery({
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<App | null>(null);
   const [isReady, setIsReady] = useState(false);
-
   // Initialize the app only once
   useEffect(() => {
     if (!containerRef.current) return;
 
     const initializeApp = () => {
       if (containerRef.current && !appRef.current) {
-        const { clientWidth, clientHeight } = containerRef.current; // Wait for container to have proper dimensions
+        const { clientWidth, clientHeight } = containerRef.current;
+        // Wait for container to have proper dimensions
         if (clientWidth > 0 && clientHeight > 0) {
           try {
-            // Always initialize with undefined items - let updateMedias handle the real data
+            // Initialize with default images (not undefined) - this ensures gallery shows immediately
             appRef.current = new App(containerRef.current, {
-              items: undefined, // Force use of defaults initially
+              items: defaultImageItems, // Start with default images
               bend,
               textColor,
               borderRadius,
@@ -719,7 +719,7 @@ export default function CircularGallery({
             });
             setIsReady(true);
             console.log(
-              "CircularGallery: App initialized with default items, will update with real data",
+              "CircularGallery: App initialized with default images, ready to update with Unsplash data",
             );
           } catch (error) {
             console.error("Failed to initialize CircularGallery:", error);
@@ -744,17 +744,39 @@ export default function CircularGallery({
     };
   }, []); // Empty dependency array - initialize only once  // Handle prop updates without recreating the app
   useEffect(() => {
+    console.log("🎯 CircularGallery useEffect triggered:", {
+      appExists: !!appRef.current,
+      isReady,
+      itemsExists: !!items,
+      itemsLength: items?.length || 0,
+      itemsType: typeof items,
+      firstItem: items?.[0],
+    });
+
     if (appRef.current && isReady) {
-      // Always update medias when any prop changes, even if items is undefined
-      console.log("CircularGallery: Updating medias with items:", {
-        items: items ? `${items.length} items` : "undefined (using defaults)",
-        firstItem: items?.[0],
-        bend,
-        textColor,
-        borderRadius,
-        font,
-      });
-      appRef.current.updateMedias(items, bend, textColor, borderRadius, font);
+      // Only update when we have real Unsplash items (avoid updating with undefined)
+      if (items && items.length > 0) {
+        console.log("✅ CircularGallery: Updating with Unsplash items:", {
+          itemsLength: items.length,
+          firstItem: items[0],
+          bend,
+          textColor,
+          borderRadius,
+          font,
+        });
+        appRef.current.updateMedias(items, bend, textColor, borderRadius, font);
+      } else {
+        // Update other props but keep existing items
+        console.log("⏸️ CircularGallery: Updating props only (no new items):", {
+          bend,
+          textColor,
+          borderRadius,
+          font,
+          itemsStatus: items
+            ? `array with ${items.length} items`
+            : `${typeof items}`,
+        });
+      }
     }
   }, [
     items,
