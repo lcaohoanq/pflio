@@ -52,6 +52,7 @@ const Portfolio: React.FC = () => {
       condition: unsplashSuccess && unsplashItems && unsplashItems.length > 0,
     });
 
+    // Only return items when we have successful data AND items exist
     if (unsplashSuccess && unsplashItems && unsplashItems.length > 0) {
       console.log(
         "✅ Portfolio: Using Unsplash items for gallery:",
@@ -60,10 +61,11 @@ const Portfolio: React.FC = () => {
       );
       return unsplashItems;
     }
+
     console.log(
-      "⏳ Portfolio: Unsplash not ready, gallery will use defaults initially",
+      "⏳ Portfolio: Unsplash not ready, returning undefined to keep current gallery",
     );
-    return undefined;
+    return undefined; // Return undefined to prevent unnecessary updates
   }, [unsplashSuccess, unsplashItems]);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -84,6 +86,31 @@ const Portfolio: React.FC = () => {
   const sectionTitles = ["Hero", "About", "Skills", "Projects", "Contact"];
   const currentSetting = settings.find((e) => e.section === currentSection);
 
+  // Debug when galleryItems change and when we're on the about section
+  useEffect(() => {
+    console.log("🖼️ Portfolio component state:", {
+      unsplashSuccess,
+      unsplashItems: unsplashItems?.length || 0,
+      currentSection,
+      directItemsForGallery:
+        unsplashSuccess && unsplashItems && unsplashItems.length > 0
+          ? unsplashItems.length
+          : 0,
+    });
+
+    if (currentSection === 1) {
+      // About section
+      console.log("🖼️ About section active with direct items:", {
+        unsplashSuccess,
+        itemsLength: unsplashItems?.length || 0,
+        hasItems: !!unsplashItems && unsplashItems.length > 0,
+        currentSection,
+        directPassingItems:
+          unsplashSuccess && unsplashItems && unsplashItems.length > 0,
+      });
+    }
+  }, [unsplashSuccess, unsplashItems, currentSection]);
+
   const sections = useMemo(
     () => [
       {
@@ -91,102 +118,96 @@ const Portfolio: React.FC = () => {
         title: "Welcome to My Portfolio",
         subtitle: "Software Engineer & Backend Developer",
         content: (
-          <div className="text-center space-y-6 md:space-y-8">
-            <div className="relative">
-              <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full overflow-hidden border-4 border-white shadow-2xl relative z-10 hover:shadow-3xl transition-all duration-500 hover:scale-105 magnetic-hover">
-                <img
-                  src="https://avatars.githubusercontent.com/u/136492579?v=4"
-                  alt="Profile"
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                />
-                {/* Glowing ring effect */}
-                <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-pulse"></div>
-              </div>
-              {/* Enhanced floating circles animation */}
-              <div className="absolute inset-0 -z-10">
-                {[...Array(8)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-3 h-3 md:w-4 md:h-4 bg-white/20 rounded-full animate-pulse hover:bg-white/40 transition-colors"
-                    style={{
-                      left: `${30 + Math.sin((i * Math.PI) / 4) * 80}%`,
-                      top: `${50 + Math.cos((i * Math.PI) / 4) * 40}%`,
-                      animationDelay: `${i * 0.3}s`,
-                      animationDuration: `${2 + Math.random()}s`,
-                      filter: `hue-rotate(${i * 45}deg)`,
-                    }}
+          <div className="text-left space-y-6 md:space-y-8">
+            <div className="relative flex items-start gap-20 md:gap-20">
+              {" "}
+              {/* Added items-center and gap */}
+              {/* Avatar Section - Fixed width */}
+              <div className="flex-shrink-0">
+                {" "}
+                {/* Prevent avatar from shrinking */}
+                <div className="w-40 h-40 md:w-30 md:h-30 lg:w-30 lg:h-30 rounded-full overflow-hidden border-4 border-white shadow-2xl relative z-10 hover:shadow-3xl transition-all duration-500 hover:scale-105 magnetic-hover">
+                  <img
+                    src="https://avatars.githubusercontent.com/u/136492579?v=4"
+                    alt="Profile"
+                    className="w-50% h-full object-cover hover:scale-110 transition-transform duration-500"
                   />
-                ))}
-                {/* Orbiting elements */}
-                {[...Array(3)].map((_, i) => (
-                  <div
-                    key={`orbit-${i}`}
-                    className="absolute w-1 h-1 bg-blue-300/60 rounded-full"
-                    style={{
-                      left: `${50 + Math.sin((Date.now() / 1000 + i * 2) * 0.5) * 60}%`,
-                      top: `${50 + Math.cos((Date.now() / 1000 + i * 2) * 0.5) * 30}%`,
-                      animation: `orbit ${3 + i}s linear infinite`,
-                    }}
-                  />
-                ))}
+                  {/* Glowing ring effect */}
+                  <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-pulse"></div>
+                </div>
+                {/* Enhanced floating circles animation - positioned relative to avatar */}
+              </div>
+              {/* Text Content Section - Flexible width */}
+              <div className="flex-1 space-y-4 min-w-0">
+                {" "}
+                {/* flex-1 allows it to take remaining space, min-w-0 prevents overflow */}
+                <h1
+                  className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
+                  style={{ color: theme.colors.text }}
+                >
+                  <span className="inline-block hover:scale-105 transition-transform duration-300">
+                    Luu
+                  </span>{" "}
+                  <span className="inline-block hover:scale-105 transition-transform duration-300">
+                    Cao
+                  </span>{" "}
+                  <span className="inline-block hover:scale-105 transition-transform duration-300">
+                    Hoang
+                  </span>
+                </h1>
+                <p
+                  className="text-base md:text-lg leading-relaxed max-w-2xl"
+                  style={{ color: theme.colors.textSecondary }}
+                >
+                  Full Stack Developer, He/Him
+                </p>
+                <div className="flex flex-col sm:flex-row justify-start items-start sm:items-center mt-6">
+                  <a
+                    href="https://github.com/lcaohoanq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative inline-block font-medium group overflow-hidden"
+                    style={{ color: theme.colors.text }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <div>
+                        <span className="relative z-10 mb-3">lcaohoanq</span>
+
+                        <span className="absolute bottom-0 right-0 h-0.5 bg-gray-900 transition-all duration-300 ease-out w-full group-hover:w-0"></span>
+                      </div>
+                      <img
+                        src="/arrow-up-right-svgrepo-com.svg"
+                        alt="Arrow"
+                        className="w-4 h-4 relative z-0 transition-transform duration-300 group-hover:scale-125"
+                      />
+                    </div>
+                  </a>
+                </div>
+                <p
+                  className="text-base md:text-lg leading-relaxed max-w-2xl"
+                  style={{ color: theme.colors.textSecondary }}
+                >
+                  Passionate about creating innovative solutions with{" "}
+                  <span
+                    className="font-semibold"
+                    style={{ color: theme.colors.accent }}
+                  >
+                    Spring Boot
+                  </span>
+                  ,{" "}
+                  <span
+                    className="font-semibold"
+                    style={{ color: theme.colors.primary }}
+                  >
+                    React
+                  </span>
+                  , and modern web technologies. Creative and visionary Full
+                  Stack Developer with a passion for delivering impactful brand
+                  experiences. Seeking a challenging role in Tokyo to lead and
+                  inspire a talented engineering team.
+                </p>
               </div>
             </div>
-            <div className="space-y-4">
-              <h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
-                style={{ color: theme.colors.text }}
-              >
-                <span className="inline-block hover:scale-105 transition-transform duration-300">
-                  Luu
-                </span>{" "}
-                <span className="inline-block hover:scale-105 transition-transform duration-300">
-                  Cao
-                </span>{" "}
-                <span className="inline-block hover:scale-105 transition-transform duration-300">
-                  Hoang
-                </span>
-              </h1>
-              <p
-                className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed px-4"
-                style={{ color: theme.colors.textSecondary }}
-              >
-                Passionate about creating innovative solutions with{" "}
-                <span
-                  className="font-semibold"
-                  style={{ color: theme.colors.accent }}
-                >
-                  Spring Boot
-                </span>
-                ,{" "}
-                <span
-                  className="font-semibold"
-                  style={{ color: theme.colors.primary }}
-                >
-                  React
-                </span>
-                , and modern web technologies
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
-              <a
-                href="https://github.com/lcaohoanq"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-white text-gray-900 px-6 py-3 rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 font-medium flex items-center space-x-2"
-              >
-                <span>Contact Me</span>
-                <span className="group-hover:translate-x-1 transition-transform">
-                  →
-                </span>
-              </a>
-            </div>
-            {/* Scroll hint */}
-            {/* <div className="mt-12 opacity-70">
-            <p className="text-sm text-gray-300 mb-2">Discover more below</p>
-            <div className="w-6 h-10 border-2 border-white/50 rounded-full mx-auto flex justify-center">
-              <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce"></div>
-            </div>
-          </div> */}
           </div>
         ),
         background: theme.colors.background,
@@ -305,10 +326,29 @@ const Portfolio: React.FC = () => {
                   zIndex: 30,
                 }}
               >
-                {" "}
+                {/* Debug log before rendering CircularGallery */}
+                {(() => {
+                  const itemsToPass =
+                    unsplashSuccess && unsplashItems && unsplashItems.length > 0
+                      ? unsplashItems
+                      : undefined;
+                  console.log("🎯 About to render CircularGallery with:", {
+                    itemsToPass,
+                    itemsLength: itemsToPass?.length || 0,
+                    unsplashSuccess,
+                    unsplashItemsLength: unsplashItems?.length || 0,
+                    firstUnsplashItem: unsplashItems?.[0],
+                  });
+                  return null;
+                })()}
+
                 {/* CircularGallery with Unsplash or fallback items */}
                 <CircularGallery
-                  items={galleryItems}
+                  items={
+                    unsplashSuccess && unsplashItems && unsplashItems.length > 0
+                      ? unsplashItems
+                      : undefined
+                  }
                   bend={3}
                   textColor="#ffffff"
                   borderRadius={0.05}
@@ -327,13 +367,13 @@ const Portfolio: React.FC = () => {
         content: <SkillsSection currentSection={currentSection} />,
         background: theme.colors.background,
       },
-      {
-        id: "projects",
-        title: "Featured Projects",
-        subtitle: "Some of My Best Work",
-        content: <ProjectsSection currentSection={currentSection} />,
-        background: theme.colors.background,
-      },
+      // {
+      //   id: "projects",
+      //   title: "Featured Projects",
+      //   subtitle: "Some of My Best Work",
+      //   content: <ProjectsSection currentSection={currentSection} />,
+      //   background: theme.colors.background,
+      // },
       {
         id: "contact",
         title: "Let's Connect",
@@ -464,7 +504,7 @@ const Portfolio: React.FC = () => {
         background: theme.colors.background,
       },
     ],
-    [theme.colors],
+    [theme.colors, unsplashSuccess, unsplashItems],
   );
 
   useEffect(() => {
@@ -691,8 +731,8 @@ const Portfolio: React.FC = () => {
             disabled={isAnimating}
             className={`group relative w-3 h-3 rounded-full transition-all duration-300 ${
               currentSection === index
-                ? "bg-white scale-150 shadow-lg shadow-white/50"
-                : "bg-white/50 hover:bg-white/80 hover:scale-125"
+                ? "bg-black scale-150 ring-2 ring-white"
+                : "bg-black/40 hover:bg-black/70 hover:scale-125"
             } ${isAnimating ? "pointer-events-none" : ""}`}
             aria-label={`Go to section ${index + 1}: ${section.title}`}
           >
@@ -718,7 +758,11 @@ const Portfolio: React.FC = () => {
             backgroundAttachment: "fixed",
           }}
         >
-          <div className="w-full max-w-7xl mx-auto relative">
+          <div
+            className={`w-full mx-auto relative ${
+              section.id === "skills" ? "max-w-5xl" : "max-w-3xl"
+            }`}
+          >
             {/* Enhanced floating particles effect with morphing shapes */}
             <div
               className="absolute inset-0 overflow-hidden pointer-events-none"
@@ -781,27 +825,6 @@ const Portfolio: React.FC = () => {
                     }
                   </div>
                 ))}
-              </div>
-            )}
-            {index === 2 && (
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {/* Tech icons floating for skills section */}
-                {["⚛️", "☕", "🐘", "⚡", "🔧", "📱", "💻", "🚀"].map(
-                  (icon, i) => (
-                    <div
-                      key={i}
-                      className="absolute text-2xl opacity-20 animate-bounce"
-                      style={{
-                        left: `${Math.random() * 90 + 5}%`,
-                        top: `${Math.random() * 90 + 5}%`,
-                        animationDelay: `${i * 0.3}s`,
-                        animationDuration: `${2 + Math.random()}s`,
-                      }}
-                    >
-                      {icon}
-                    </div>
-                  ),
-                )}
               </div>
             )}
           </div>

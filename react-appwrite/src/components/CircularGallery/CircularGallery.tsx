@@ -267,6 +267,7 @@ class Media {
         uniform vec2 uPlaneSizes;
         uniform sampler2D tMap;
         uniform float uBorderRadius;
+        uniform float uImageLoaded;
         varying vec2 vUv;
 
         float roundedBoxSDF(vec2 p, vec2 b, float r) {
@@ -285,6 +286,11 @@ class Media {
           );
           vec4 color = texture2D(tMap, uv);
 
+          // Show loading state if image not loaded
+          if (uImageLoaded < 0.5) {
+            color = vec4(0.2, 0.2, 0.2, 1.0); // Gray placeholder
+          }
+
           float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
           if(d > 0.0) {
             discard;
@@ -300,19 +306,38 @@ class Media {
         uSpeed: { value: 0 },
         uTime: { value: 100 * Math.random() },
         uBorderRadius: { value: this.borderRadius },
+        uImageLoaded: { value: 0 },
       },
       transparent: true,
     });
+
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.src = this.image;
+
+    // Add error handling for image loading
+    img.onerror = () => {
+      console.warn(`❌ Failed to load image: ${this.image}`);
+      // Set a default image size to prevent shader errors
+      this.program.uniforms.uImageSizes.value = [512, 512];
+      this.program.uniforms.uImageLoaded.value = 0;
+    };
+
     img.onload = () => {
+      console.log(
+        `✅ Image loaded successfully: ${this.image.substring(0, 50)}...`,
+      );
       texture.image = img;
       this.program.uniforms.uImageSizes.value = [
         img.naturalWidth,
         img.naturalHeight,
       ];
+      this.program.uniforms.uImageLoaded.value = 1;
     };
+
+    img.src = this.image;
+
+    // Set default image size immediately to prevent shader errors
+    this.program.uniforms.uImageSizes.value = [512, 512];
   }
 
   createMesh() {
@@ -550,18 +575,36 @@ class App {
       firstItem: items?.[0],
     });
 
-    // Clean up existing medias
-    this.medias.forEach((media) => {
-      if (media.plane && media.plane.parent) {
-        media.plane.parent.removeChild(media.plane);
-      }
-    });
-    this.medias = [];
+    // Validate items before proceeding
+    if (!items || items.length === 0) {
+      console.log(
+        "App.updateMedias: No valid items provided, keeping current medias",
+      );
+      return;
+    }
 
-    // Create new medias
-    this.createMedias(items, bend, textColor, borderRadius, font);
+    try {
+      // Clean up existing medias
+      this.medias.forEach((media) => {
+        if (media.plane && media.plane.parent) {
+          media.plane.parent.removeChild(media.plane);
+        }
+      });
+      this.medias = [];
 
-    console.log("App.updateMedias: Created", this.medias.length, "media items");
+      // Create new medias
+      this.createMedias(items, bend, textColor, borderRadius, font);
+
+      console.log(
+        "App.updateMedias: Successfully created",
+        this.medias.length,
+        "media items",
+      );
+    } catch (error) {
+      console.error("App.updateMedias: Error updating medias:", error);
+      // Fallback to default items if update fails
+      this.createMedias(defaultImageItems, bend, textColor, borderRadius, font);
+    }
   }
 
   onTouchDown(e: MouseEvent | TouchEvent) {
@@ -697,6 +740,23 @@ export default function CircularGallery({
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<App | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [lastUpdateItems, setLastUpdateItems] = useState<
+    { image: string; text: string }[] | undefined
+  >(undefined);
+
+  // Log every time the component receives props
+  console.log("🎨 CircularGallery component render:", {
+    itemsProp: items,
+    itemsLength: items?.length || 0,
+    itemsType: typeof items,
+    isArray: Array.isArray(items),
+    firstItem: items?.[0],
+    componentState: {
+      isReady,
+      appExists: !!appRef.current,
+    },
+  });
+
   // Initialize the app only once
   useEffect(() => {
     if (!containerRef.current) return;
@@ -740,9 +800,12 @@ export default function CircularGallery({
         appRef.current.destroy();
         appRef.current = null;
         setIsReady(false);
+        setLastUpdateItems(undefined);
       }
     };
-  }, []); // Empty dependency array - initialize only once  // Handle prop updates without recreating the app
+  }, []); // Empty dependency array - initialize only once
+
+  // Handle prop updates without recreating the app
   useEffect(() => {
     console.log("🎯 CircularGallery useEffect triggered:", {
       appExists: !!appRef.current,
@@ -751,32 +814,64 @@ export default function CircularGallery({
       itemsLength: items?.length || 0,
       itemsType: typeof items,
       firstItem: items?.[0],
+      lastUpdateItemsLength: lastUpdateItems?.length || 0,
+      itemsIsArray: Array.isArray(items),
+      itemsValue: items,
     });
 
     if (appRef.current && isReady) {
-      // Only update when we have real Unsplash items (avoid updating with undefined)
-      if (items && items.length > 0) {
-        console.log("✅ CircularGallery: Updating with Unsplash items:", {
-          itemsLength: items.length,
-          firstItem: items[0],
-          bend,
-          textColor,
-          borderRadius,
-          font,
-        });
-        appRef.current.updateMedias(items, bend, textColor, borderRadius, font);
+      // Check if we have valid items array with content
+      if (items && Array.isArray(items) && items.length > 0) {
+        // Check if items actually changed to prevent unnecessary updates
+        const itemsChanged =
+          !lastUpdateItems ||
+          lastUpdateItems.length !== items.length ||
+          items.some(
+            (item, index) =>
+              !lastUpdateItems[index] ||
+              lastUpdateItems[index].image !== item.image,
+          );
+
+        if (itemsChanged) {
+          console.log("✅ CircularGallery: Updating with new Unsplash items:", {
+            itemsLength: items.length,
+            firstItem: items[0],
+            bend,
+            textColor,
+            borderRadius,
+            font,
+          });
+
+          // Add a small delay to ensure the app is fully ready
+          setTimeout(() => {
+            if (appRef.current) {
+              appRef.current.updateMedias(
+                items,
+                bend,
+                textColor,
+                borderRadius,
+                font,
+              );
+              setLastUpdateItems([...items]); // Store a copy of current items
+            }
+          }, 100);
+        } else {
+          console.log("⏭️ CircularGallery: Items unchanged, skipping update");
+        }
       } else {
-        // Update other props but keep existing items
-        console.log("⏸️ CircularGallery: Updating props only (no new items):", {
-          bend,
-          textColor,
-          borderRadius,
-          font,
-          itemsStatus: items
-            ? `array with ${items.length} items`
-            : `${typeof items}`,
+        // If items become empty/undefined, only update other props
+        console.log("⏸️ CircularGallery: No valid items available:", {
+          itemsExists: !!items,
+          isArray: Array.isArray(items),
+          length: items?.length || 0,
+          itemsType: typeof items,
         });
       }
+    } else {
+      console.log("⏳ CircularGallery: App not ready yet:", {
+        appExists: !!appRef.current,
+        isReady,
+      });
     }
   }, [
     items,
@@ -787,6 +882,7 @@ export default function CircularGallery({
     scrollSpeed,
     scrollEase,
     isReady,
+    lastUpdateItems,
   ]);
 
   return (
@@ -795,7 +891,7 @@ export default function CircularGallery({
       ref={containerRef}
       style={{
         opacity: isReady ? 1 : 0,
-        transition: "opacity 0.3s ease-in-out",
+        transition: "opacity 0.5s ease-in-out",
         minHeight: "400px",
       }}
     />

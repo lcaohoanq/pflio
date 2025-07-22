@@ -8,6 +8,7 @@ export type ThemeVariant =
   | "sunset-orange"
   | "monochrome"
   | "monochromehc"
+  | "monochromelhc"
   | "galaxy-purple"
   | "terminal-hacker"
   | "rose-gold"
@@ -164,6 +165,25 @@ const themes: Record<ThemeVariant, Theme> = {
       particle: "#f1f1f1", // Hạt trang trí trắng
     },
   },
+  monochromelhc: {
+    name: "Monochrome Light Contrast",
+    icon: "⚪",
+    description: "High contrast white and black",
+    colors: {
+      primary: "#121212", // Soft black
+      secondary: "#f1f1f1", // Soft white
+      accent: "#121212", // Accent là đen nhẹ
+      background: "#f1f1f1", // Background chính là trắng mềm
+      surface: "#ffffff", // Layer trên nền, sáng hơn một chút
+      text: "#121212", // Text đen
+      textSecondary: "#3a3a3a", // Gray nhẹ cho secondary text
+      border: "#121212", // Viền đen mềm
+      glow: "#121212", // Glow nhẹ
+      gradient: "linear-gradient(45deg, #f1f1f1, #121212)", // Gradient giữa 2 màu
+      particle: "#121212", // Hạt trang trí đen
+    },
+  },
+
   "galaxy-purple": {
     name: "Galaxy Purple",
     icon: "🌌",
@@ -264,7 +284,7 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [currentTheme, setCurrentTheme] =
-    useState<ThemeVariant>("monochromehc");
+    useState<ThemeVariant>("monochromelhc");
 
   useEffect(() => {
     // Load theme from localStorage

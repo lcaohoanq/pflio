@@ -67,25 +67,25 @@ body.high-contrast {
   border-color: var(--theme-border);
 }
 
-@font-face {
-  font-family: 'SFBold';
-  src: url('./assets/fonts/SFCompactRounded-Bold.otf') format('opentype');
-}
+// @font-face {
+//   font-family: 'SFBold';
+//   src: url('./assets/fonts/SFCompactRounded-Bold.otf') format('opentype');
+// }
 
-@font-face {
-  font-family: 'SFMono-Bold';
-  src: url('./assets/fonts/SFMono-Bold.otf') format('opentype');
-}
+// @font-face {
+//   font-family: 'SFMono-Bold';
+//   src: url('./assets/fonts/SFMono-Bold.otf') format('opentype');
+// }
 
-@font-face {
-  font-family: 'SFMono-Light';
-  src: url('./assets/fonts/SFMono-Light.otf') format('opentype');
-}
+// @font-face {
+//   font-family: 'SFMono-Light';
+//   src: url('./assets/fonts/SFMono-Light.otf') format('opentype');
+// }
 
-@font-face {
-  font-family: 'SFProRounded-Thin';
-  src: url('./assets/fonts/SFProRounded-Thin.otf') format('opentype');
-}
+// @font-face {
+//   font-family: 'SFProRounded-Thin';
+//   src: url('./assets/fonts/SFProRounded-Thin.otf') format('opentype');
+// }
 
 * {
   margin: 0;
