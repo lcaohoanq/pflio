@@ -59,6 +59,9 @@ const SkillsSection: React.FC<SkillsProps> = ({ currentSection }) => {
       skills: [
         "Selft-hosting",
         "Home Lab",
+        "Maven Central Repository",
+        "npm Registry",
+        ,
         "ZimaOS",
         "Docker",
         "CI/CD (GitHub Actions, Jenkins)",

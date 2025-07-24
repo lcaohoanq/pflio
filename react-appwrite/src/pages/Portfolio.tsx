@@ -206,7 +206,7 @@ const Portfolio: React.FC = () => {
                       className="text-2xl font-bold"
                       style={{ color: theme.colors.primary }}
                     >
-                      5+
+                      50+
                     </h3>
                     <p style={{ color: theme.colors.textSecondary }}>
                       Projects
@@ -223,42 +223,10 @@ const Portfolio: React.FC = () => {
                       className="text-2xl font-bold"
                       style={{ color: theme.colors.primary }}
                     >
-                      3+
+                      2+
                     </h3>
                     <p style={{ color: theme.colors.textSecondary }}>
-                      Years Learning
-                    </p>
-                  </div>
-                  <div
-                    className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                    style={{
-                      backgroundColor: theme.colors.surface,
-                      borderColor: theme.colors.border + "30",
-                    }}
-                  >
-                    <h3
-                      className="text-2xl font-bold"
-                      style={{ color: theme.colors.primary }}
-                    >
-                      100+
-                    </h3>
-                    <p style={{ color: theme.colors.textSecondary }}>Commits</p>
-                  </div>
-                  <div
-                    className="backdrop-blur-sm rounded-lg p-6 text-center border"
-                    style={{
-                      backgroundColor: theme.colors.surface,
-                      borderColor: theme.colors.border + "30",
-                    }}
-                  >
-                    <h3
-                      className="text-2xl font-bold"
-                      style={{ color: theme.colors.primary }}
-                    >
-                      24/7
-                    </h3>
-                    <p style={{ color: theme.colors.textSecondary }}>
-                      Learning
+                      Years Experience
                     </p>
                   </div>
                 </div>
