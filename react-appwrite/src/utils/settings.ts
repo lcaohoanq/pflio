@@ -11,17 +11,17 @@ export const settings = [
   },
   {
     section: 2,
-    scrollGuideText: "Keep going",
-    isShowIcon: true,
+    scrollGuideText: "",
+    isShowIcon: false,
   },
   {
     section: 3,
     scrollGuideText: "Almost there",
-    isShowIcon: true,
+    isShowIcon: false,
   },
   {
     section: 4,
     scrollGuideText: "You made it!",
-    isShowIcon: true,
+    isShowIcon: false,
   },
 ];

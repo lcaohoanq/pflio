@@ -48,3 +48,26 @@ export const defaultImageItems = [
     text: "Palm Trees",
   },
 ];
+
+export const socialLinks = [
+  {
+    href: "https://github.com/lcaohoanq",
+    icon: "/github.png",
+    alt: "GitHub",
+  },
+  {
+    href: "https://shinbun.vercel.app/",
+    icon: "/newspaper-solid-full.svg",
+    alt: "NewsPaper",
+  },
+  {
+    href: "https://linkedin.com/in/lcaohoanq",
+    icon: "/linkedin.png",
+    alt: "LinkedIn",
+  },
+  {
+    href: "https://unsplash.com/@lcaohoanq",
+    icon: "/unsplash.png",
+    alt: "Unsplash",
+  },
+];

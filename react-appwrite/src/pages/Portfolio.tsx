@@ -2,18 +2,17 @@ import { animate, stagger } from "animejs";
 import React, {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
-  useMemo,
 } from "react";
-import ProjectsSection from "../components/ProjectsSection";
 import SkillsSection from "../components/SkillsSection";
 // import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
-import { useTheme } from "../components/ThemeProvider";
-import ShinyText from "~/components/ShinyText/ShinyText";
 import CircularGallery from "~/components/CircularGallery/CircularGallery";
 import { useUnsplashForGallery } from "~/hooks/useUnsplash";
 import { settings } from "~/utils/settings";
+import { useTheme } from "../components/ThemeProvider";
+import { socialLinks } from "~/utils/images";
 
 const Portfolio: React.FC = () => {
   const { theme } = useTheme();
@@ -31,42 +30,12 @@ const Portfolio: React.FC = () => {
     cacheTime: 10 * 60 * 1000, // 10 minutes cache
     orderBy: "views", // Sort by most viewed (likes) in descending order
   }); // Debug Unsplash data
-  useEffect(() => {
-    console.log("🔍 Portfolio: Unsplash state:", {
-      loading: unsplashLoading,
-      success: unsplashSuccess,
-      error: unsplashError,
-      itemsLength: unsplashItems?.length || 0,
-      items: unsplashItems?.slice(0, 3), // Log first 3 items for more detail
-      hasItems: !!unsplashItems && unsplashItems.length > 0,
-      condition: unsplashSuccess && unsplashItems && unsplashItems.length > 0,
-    });
-  }, [unsplashLoading, unsplashSuccess, unsplashError, unsplashItems]);
-
-  // Prepare gallery items - always pass items, even if empty array
-  const galleryItems = useMemo(() => {
-    console.log("🎯 Portfolio galleryItems memoization:", {
-      unsplashSuccess,
-      itemsExists: !!unsplashItems,
-      itemsLength: unsplashItems?.length || 0,
-      condition: unsplashSuccess && unsplashItems && unsplashItems.length > 0,
-    });
-
-    // Only return items when we have successful data AND items exist
-    if (unsplashSuccess && unsplashItems && unsplashItems.length > 0) {
-      console.log(
-        "✅ Portfolio: Using Unsplash items for gallery:",
-        unsplashItems.length,
-        "items",
-      );
-      return unsplashItems;
-    }
-
-    console.log(
-      "⏳ Portfolio: Unsplash not ready, returning undefined to keep current gallery",
-    );
-    return undefined; // Return undefined to prevent unnecessary updates
-  }, [unsplashSuccess, unsplashItems]);
+  useEffect(() => {}, [
+    unsplashLoading,
+    unsplashSuccess,
+    unsplashError,
+    unsplashItems,
+  ]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
@@ -87,29 +56,7 @@ const Portfolio: React.FC = () => {
   const currentSetting = settings.find((e) => e.section === currentSection);
 
   // Debug when galleryItems change and when we're on the about section
-  useEffect(() => {
-    console.log("🖼️ Portfolio component state:", {
-      unsplashSuccess,
-      unsplashItems: unsplashItems?.length || 0,
-      currentSection,
-      directItemsForGallery:
-        unsplashSuccess && unsplashItems && unsplashItems.length > 0
-          ? unsplashItems.length
-          : 0,
-    });
-
-    if (currentSection === 1) {
-      // About section
-      console.log("🖼️ About section active with direct items:", {
-        unsplashSuccess,
-        itemsLength: unsplashItems?.length || 0,
-        hasItems: !!unsplashItems && unsplashItems.length > 0,
-        currentSection,
-        directPassingItems:
-          unsplashSuccess && unsplashItems && unsplashItems.length > 0,
-      });
-    }
-  }, [unsplashSuccess, unsplashItems, currentSection]);
+  useEffect(() => {}, [unsplashSuccess, unsplashItems, currentSection]);
 
   const sections = useMemo(
     () => [
@@ -326,22 +273,6 @@ const Portfolio: React.FC = () => {
                   zIndex: 30,
                 }}
               >
-                {/* Debug log before rendering CircularGallery */}
-                {(() => {
-                  const itemsToPass =
-                    unsplashSuccess && unsplashItems && unsplashItems.length > 0
-                      ? unsplashItems
-                      : undefined;
-                  console.log("🎯 About to render CircularGallery with:", {
-                    itemsToPass,
-                    itemsLength: itemsToPass?.length || 0,
-                    unsplashSuccess,
-                    unsplashItemsLength: unsplashItems?.length || 0,
-                    firstUnsplashItem: unsplashItems?.[0],
-                  });
-                  return null;
-                })()}
-
                 {/* CircularGallery with Unsplash or fallback items */}
                 <CircularGallery
                   items={
@@ -349,7 +280,7 @@ const Portfolio: React.FC = () => {
                       ? unsplashItems
                       : undefined
                   }
-                  bend={3}
+                  bend={0}
                   textColor="#ffffff"
                   borderRadius={0.05}
                   scrollEase={0.02}
@@ -385,9 +316,10 @@ const Portfolio: React.FC = () => {
               style={{ color: theme.colors.textSecondary }}
             >
               I'm always interested in new opportunities and collaborations.
+              <br />
               Feel free to reach out if you'd like to work together!
             </p>
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="grid md:grid-cols-1 gap-8 mb-12 ">
               <div className="space-y-4">
                 <div
                   className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
@@ -396,108 +328,34 @@ const Portfolio: React.FC = () => {
                     borderColor: theme.colors.border + "30",
                   }}
                 >
-                  <span className="text-2xl">📧</span>
+                  <img src="/email.svg" alt="GitHub" className="w-6 h-6" />
                 </div>
-                <h3
-                  className="text-lg font-semibold"
-                  style={{ color: theme.colors.text }}
+                <p
+                  style={{
+                    color: theme.colors.textSecondary,
+                  }}
                 >
-                  Email
-                </h3>
-                <p style={{ color: theme.colors.textSecondary }}>
-                  lcaohoanq@gmail.com
+                  hoangclw@gmail.com
                 </p>
               </div>
-              <div className="space-y-4">
-                <div
-                  className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
-                  style={{
-                    backgroundColor: theme.colors.surface,
-                    borderColor: theme.colors.border + "30",
-                  }}
-                >
-                  <span className="text-2xl">💼</span>
-                </div>
-                <h3
-                  className="text-lg font-semibold"
-                  style={{ color: theme.colors.text }}
-                >
-                  LinkedIn
-                </h3>
-                <a
-                  href="https://linkedin.com/in/lcaohoanq"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-80 transition-opacity"
-                  style={{ color: theme.colors.primary }}
-                >
-                  /in/lcaohoanq
-                </a>
-              </div>
-              <div className="space-y-4">
-                <div
-                  className="w-16 h-16 mx-auto rounded-full flex items-center justify-center border"
-                  style={{
-                    backgroundColor: theme.colors.surface,
-                    borderColor: theme.colors.border + "30",
-                  }}
-                >
-                  <span className="text-2xl">📱</span>
-                </div>
-                <h3
-                  className="text-lg font-semibold"
-                  style={{ color: theme.colors.text }}
-                >
-                  Blog
-                </h3>
-                <a
-                  href="https://shinbun.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-80 transition-opacity"
-                  style={{ color: theme.colors.primary }}
-                >
-                  shinbun 新聞
-                </a>
-              </div>
             </div>
-            <div className="flex justify-center space-x-6">
-              <a
-                href="https://github.com/lcaohoanq"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
-                style={{
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border + "30",
-                }}
-              >
-                <img src="/github.png" alt="GitHub" className="w-6 h-6" />
-              </a>
-              <a
-                href="https://linkedin.com/in/lcaohoanq"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
-                style={{
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border + "30",
-                }}
-              >
-                <img src="/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
-              </a>
-              <a
-                href="https://unsplash.com/@lcaohoanq"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-4 rounded-full transition-all duration-300 hover:scale-110 border"
-                style={{
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.border + "30",
-                }}
-              >
-                <img src="/unsplash.png" alt="Unsplash" className="w-6 h-6" />
-              </a>
+            <div className="flex justify-center gap-6 transition-transform duration-300 hover:scale-105">
+              {socialLinks.map(({ href, icon, alt }) => (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={alt}
+                  className="p-4 rounded-full border transition-all duration-300 hover:scale-110 hover:shadow-md hover:ring-2 hover:ring-[#121212]"
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border + "30",
+                  }}
+                >
+                  <img src={icon} alt={alt} className="w-6 h-6" />
+                </a>
+              ))}
             </div>
           </div>
         ),
@@ -760,7 +618,9 @@ const Portfolio: React.FC = () => {
         >
           <div
             className={`w-full mx-auto relative ${
-              section.id === "skills" ? "max-w-5xl" : "max-w-3xl"
+              section.id === "skills" || section.id === "about"
+                ? "max-w-5xl"
+                : "max-w-3xl"
             }`}
           >
             {/* Enhanced floating particles effect with morphing shapes */}
@@ -836,12 +696,12 @@ const Portfolio: React.FC = () => {
         <div className="fixed bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-50 text-white text-center">
           <div className="animate-bounce text-center opacity-80">
             {currentSetting?.isShowIcon && (
-              <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-white rounded-full flex justify-center">
-                <div className="w-1 h-2 md:h-3 bg-white rounded-full mt-1 md:mt-2 animate-pulse" />
+              <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-[#121212] rounded-full flex justify-center">
+                <div className="w-1 h-2 md:h-3 bg-[#121212] rounded-full mt-1 md:mt-2 animate-pulse" />
               </div>
             )}
             {currentSetting?.scrollGuideText && (
-              <p className="mt-2 text-xs md:text-sm">
+              <p className="mt-2 text-xs md:text-sm text-[#121212]">
                 {currentSetting.scrollGuideText}
               </p>
             )}

@@ -214,23 +214,21 @@ const shortenString = (str: string) => {
 export const useUnsplashForGallery = (config?: UseUnsplashConfig) => {
   const { photos, loading, error, ...rest } = useUnsplash(config);
 
-  console.log("useUnsplashForGallery: Raw photos from useUnsplash:", {
-    photosLength: photos.length,
-    loading,
-    error,
-    firstPhoto: photos[0],
-  });
+  const isShowImageLabel = false;
 
-  const galleryItems = photos.map((photo) => ({
-    image: photo.urls.regular, // Use regular size for good balance of quality/performance
-    text: photo.description
-      ? shortenString(photo.description)
-      : shortenString(photo.alt_description || "lch"),
-  }));
-
-  console.log("useUnsplashForGallery: Transformed gallery items:", {
-    itemsLength: galleryItems.length,
-    firstItem: galleryItems[0],
+  const galleryItems = photos.map((photo) => {
+    if (isShowImageLabel) {
+      return {
+        image: photo.urls.regular,
+        text: photo.description
+          ? shortenString(photo.description)
+          : shortenString(photo.alt_description || "lch"),
+      };
+    } else {
+      return {
+        image: photo.urls.regular,
+      };
+    }
   });
 
   return {

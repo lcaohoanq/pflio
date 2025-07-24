@@ -204,6 +204,10 @@ class Media {
   isBefore: boolean = false;
   isAfter: boolean = false;
 
+  isDragging: boolean = false;
+  dragStartX: number = 0;
+  dragThreshold: number = 10; // px
+
   constructor({
     geometry,
     gl,
@@ -236,8 +240,30 @@ class Media {
     this.font = font;
     this.createShader();
     this.createMesh();
-    this.createTitle();
+    // Create title if text is provided
+    if (this.text && this.text.trim() !== "") {
+      this.createTitle();
+    }
     this.onResize();
+
+    if (renderer.gl && renderer.gl.canvas) {
+      // Track drag state
+      renderer.gl.canvas.addEventListener("mousedown", (e: MouseEvent) => {
+        this.isDragging = false;
+        this.dragStartX = e.clientX;
+      });
+      renderer.gl.canvas.addEventListener("mousemove", (e: MouseEvent) => {
+        if (Math.abs(e.clientX - this.dragStartX) > this.dragThreshold) {
+          this.isDragging = true;
+        }
+      });
+      renderer.gl.canvas.addEventListener("click", (e: MouseEvent) => {
+        if (!this.isDragging) {
+          window.open("https://unsplash.com/@lcaohoanq", "_blank");
+        }
+        this.isDragging = false; // reset
+      });
+    }
   }
 
   createShader() {
@@ -246,21 +272,29 @@ class Media {
       depthTest: false,
       depthWrite: false,
       vertex: `
-        precision highp float;
-        attribute vec3 position;
-        attribute vec2 uv;
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-        uniform float uTime;
-        uniform float uSpeed;
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          vec3 p = position;
+      precision highp float;
+      attribute vec3 position;
+      attribute vec2 uv;
+      uniform mat4 modelViewMatrix;
+      uniform mat4 projectionMatrix;
+      uniform float uTime;
+      uniform float uSpeed;
+      uniform float uBend;
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        vec3 p = position;
+
+        // More explicit bend check - ensure absolutely no bending when bend is 0
+        if (abs(uBend) > 0.001) {
           p.z = (sin(p.x * 4.0 + uTime) * 1.5 + cos(p.y * 2.0 + uTime) * 1.5) * (0.1 + uSpeed * 0.5);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+        } else {
+          p.z = 0.0;
         }
-      `,
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+      }
+    `,
       fragment: `
         precision highp float;
         uniform vec2 uImageSizes;
@@ -307,6 +341,7 @@ class Media {
         uTime: { value: 100 * Math.random() },
         uBorderRadius: { value: this.borderRadius },
         uImageLoaded: { value: 0 },
+        uBend: { value: this.bend },
       },
       transparent: true,
     });
@@ -479,7 +514,7 @@ class App {
     container: HTMLElement,
     {
       items,
-      bend = 1,
+      bend = 0,
       textColor = "#ffffff",
       borderRadius = 0,
       font = "bold 30px Figtree",
@@ -527,7 +562,7 @@ class App {
   }
   createMedias(
     items: { image: string; text: string }[] | undefined,
-    bend: number = 1,
+    bend: number = 0,
     textColor: string,
     borderRadius: number,
     font: string,
@@ -541,7 +576,9 @@ class App {
       firstItem: galleryItems[0],
     });
 
-    this.mediasImages = galleryItems.concat(galleryItems);
+    this.mediasImages =
+      bend === 0 ? galleryItems : galleryItems.concat(galleryItems);
+
     this.medias = this.mediasImages.map((data, index) => {
       return new Media({
         geometry: this.planeGeometry,
@@ -564,7 +601,7 @@ class App {
   // Method to update media items without destroying the app
   updateMedias(
     items: { image: string; text: string }[] | undefined,
-    bend: number = 1,
+    bend: number = 0,
     textColor: string = "#ffffff",
     borderRadius: number = 0,
     font: string = "bold 30px Figtree",
@@ -719,7 +756,7 @@ class App {
 }
 
 interface CircularGalleryProps {
-  items?: { image: string; text: string }[];
+  items?: { image: string; text?: string }[];
   bend?: number;
   textColor?: string;
   borderRadius?: number;
@@ -730,7 +767,7 @@ interface CircularGalleryProps {
 
 export default function CircularGallery({
   items,
-  bend = 3,
+  bend = 0,
   textColor = "#ffffff",
   borderRadius = 0.05,
   font = "bold 30px Figtree",
