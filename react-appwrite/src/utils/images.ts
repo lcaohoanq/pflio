@@ -51,6 +51,11 @@ export const defaultImageItems = [
 
 export const socialLinks = [
   {
+    href: "/Luu_Cao_Hoang_Resume_BackendDeveloper.pdf",
+    icon: "/resume.png",
+    alt: "My Resume",
+  },
+  {
     href: "https://github.com/lcaohoanq",
     icon: "/github.png",
     alt: "GitHub",
