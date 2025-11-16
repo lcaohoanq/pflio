@@ -118,9 +118,6 @@ export const fetchUserPhotos = async (
     if (orderBy === "views" || orderBy === "downloads") {
       // Sort by likes (engagement/views) in descending order
       sortedPhotos.sort((a, b) => b.likes - a.likes);
-      console.log(
-        `📊 Sorted ${sortedPhotos.length} photos by ${orderBy} (likes: ${sortedPhotos[0]?.likes} -> ${sortedPhotos[sortedPhotos.length - 1]?.likes})`,
-      );
     }
 
     return {

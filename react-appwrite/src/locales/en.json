@@ -1,0 +1,35 @@
+{
+  "portfolio": {
+    "hero": {
+      "title": "Welcome to My Portfolio",
+      "subtitle": "Software Engineer & Backend Developer",
+      "name": "Hoang Cao Luu",
+      "role": "Full Stack Developer, He/Him",
+      "description": "I enjoy shaping ideas into systems that make sense — backend services built with Spring Boot, intuitive interfaces in React, and cloud-ready infrastructure that holds everything together. My experience across frontend, backend, DevOps, and mobile gives me a balanced view of how a product should work as a whole. I'm steadily moving toward a Solution Architect role — focused on clarity, long-term thinking, and building systems that are both elegant and practical. Looking for opportunities in Tokyo where I can grow and shape meaningful technical direction."
+    },
+    "about": {
+      "title": "About Me",
+      "subtitle": "My Journey & Passion",
+      "whoIAm": "Who I Am",
+      "intro": "I'm a dedicated software engineer with a passion for backend development, particularly with Spring Boot. I love creating robust, scalable applications and exploring the latest technologies in web development.",
+      "hobbies": "When I'm not coding, you'll find me capturing moments through photography on Unsplash, cycling through scenic routes, or sharing knowledge through my blog \"shinbun 新聞\".",
+      "projects": "Projects",
+      "experience": "Years Experience"
+    },
+    "skills": {
+      "title": "Technical Skills",
+      "subtitle": "Technologies I Work With"
+    },
+    "contact": {
+      "title": "Let's Connect",
+      "subtitle": "Get In Touch",
+      "message": "I'm always interested in new opportunities and collaborations.",
+      "reachOut": "Feel free to reach out if you'd like to work together!"
+    },
+    "scroll": {
+      "explore": "Scroll to explore",
+      "almostThere": "Almost there",
+      "madeIt": "You made it!"
+    }
+  }
+}

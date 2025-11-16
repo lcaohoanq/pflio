@@ -14,9 +14,7 @@ const SoundManager: React.FC<SoundManagerProps> = ({ enabled, onToggle }) => {
         const ctx = new (window.AudioContext ||
           (window as any).webkitAudioContext)();
         setAudioContext(ctx);
-      } catch (error) {
-        console.log("Web Audio API not supported");
-      }
+      } catch (error) {}
     }
   }, [enabled, audioContext]);
 

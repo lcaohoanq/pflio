@@ -1,0 +1,35 @@
+{
+  "portfolio": {
+    "hero": {
+      "title": "Chào mừng đến với Portfolio của tôi",
+      "subtitle": "Kỹ sư Phần mềm & Lập trình viên Backend",
+      "name": "Lưu Cao Hoàng",
+      "role": "Lập trình viên Full Stack",
+      "description": "Tôi thích biến ý tưởng thành các hệ thống hợp lý — dịch vụ backend xây dựng bằng Spring Boot, giao diện trực quan với React, và cơ sở hạ tầng đám mây giữ mọi thứ kết nối. Kinh nghiệm của tôi trải dài frontend, backend, DevOps và mobile cho tôi cái nhìn cân bằng về cách một sản phẩm hoạt động tổng thể. Tôi đang hướng tới vai trò Solution Architect — tập trung vào sự rõ ràng, tư duy dài hạn, và xây dựng hệ thống vừa tinh tế vừa thực tế. Tìm kiếm cơ hội tại Tokyo để tôi có thể phát triển và định hướng kỹ thuật có ý nghĩa."
+    },
+    "about": {
+      "title": "Về Tôi",
+      "subtitle": "Hành Trình & Đam Mê",
+      "whoIAm": "Tôi Là Ai",
+      "intro": "Tôi là một kỹ sư phần mềm tận tâm với niềm đam mê phát triển backend, đặc biệt là Spring Boot. Tôi yêu thích tạo ra các ứng dụng mạnh mẽ, có khả năng mở rộng và khám phá các công nghệ web mới nhất.",
+      "hobbies": "Khi không viết code, bạn sẽ thấy tôi chụp ảnh trên Unsplash, đạp xe qua những con đường phong cảnh, hoặc chia sẻ kiến thức qua blog \"shinbun 新聞\" của tôi.",
+      "projects": "Dự Án",
+      "experience": "Năm Kinh Nghiệm"
+    },
+    "skills": {
+      "title": "Kỹ Năng Kỹ Thuật",
+      "subtitle": "Công Nghệ Tôi Sử Dụng"
+    },
+    "contact": {
+      "title": "Kết Nối Với Tôi",
+      "subtitle": "Liên Hệ",
+      "message": "Tôi luôn quan tâm đến các cơ hội và hợp tác mới.",
+      "reachOut": "Hãy liên hệ nếu bạn muốn làm việc cùng nhau!"
+    },
+    "scroll": {
+      "explore": "Cuộn để khám phá",
+      "almostThere": "Sắp đến rồi",
+      "madeIt": "Bạn đã đến nơi!"
+    }
+  }
+}

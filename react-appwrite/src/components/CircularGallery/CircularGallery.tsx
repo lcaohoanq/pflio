@@ -358,9 +358,6 @@ class Media {
     };
 
     img.onload = () => {
-      console.log(
-        `✅ Image loaded successfully: ${this.image.substring(0, 50)}...`,
-      );
       texture.image = img;
       this.program.uniforms.uImageSizes.value = [
         img.naturalWidth,
@@ -569,13 +566,6 @@ class App {
   ) {
     const defaultItems = defaultImageItems;
     const galleryItems = items && items.length ? items : defaultItems;
-
-    console.log("App.createMedias: Using", {
-      source: items && items.length ? "Unsplash items" : "Default items",
-      itemsLength: galleryItems.length,
-      firstItem: galleryItems[0],
-    });
-
     this.mediasImages =
       bend === 0 ? galleryItems : galleryItems.concat(galleryItems);
 
@@ -606,17 +596,8 @@ class App {
     borderRadius: number = 0,
     font: string = "bold 30px Figtree",
   ) {
-    console.log("App.updateMedias: Updating with", {
-      itemsLength: items?.length || 0,
-      items: items ? "Unsplash data" : "Default data",
-      firstItem: items?.[0],
-    });
-
     // Validate items before proceeding
     if (!items || items.length === 0) {
-      console.log(
-        "App.updateMedias: No valid items provided, keeping current medias",
-      );
       return;
     }
 
@@ -631,12 +612,6 @@ class App {
 
       // Create new medias
       this.createMedias(items, bend, textColor, borderRadius, font);
-
-      console.log(
-        "App.updateMedias: Successfully created",
-        this.medias.length,
-        "media items",
-      );
     } catch (error) {
       console.error("App.updateMedias: Error updating medias:", error);
       // Fallback to default items if update fails
@@ -781,19 +756,6 @@ export default function CircularGallery({
     { image: string; text: string }[] | undefined
   >(undefined);
 
-  // Log every time the component receives props
-  console.log("🎨 CircularGallery component render:", {
-    itemsProp: items,
-    itemsLength: items?.length || 0,
-    itemsType: typeof items,
-    isArray: Array.isArray(items),
-    firstItem: items?.[0],
-    componentState: {
-      isReady,
-      appExists: !!appRef.current,
-    },
-  });
-
   // Initialize the app only once
   useEffect(() => {
     if (!containerRef.current) return;
@@ -815,9 +777,6 @@ export default function CircularGallery({
               scrollEase,
             });
             setIsReady(true);
-            console.log(
-              "CircularGallery: App initialized with default images, ready to update with Unsplash data",
-            );
           } catch (error) {
             console.error("Failed to initialize CircularGallery:", error);
             // Retry after a short delay
@@ -844,18 +803,6 @@ export default function CircularGallery({
 
   // Handle prop updates without recreating the app
   useEffect(() => {
-    console.log("🎯 CircularGallery useEffect triggered:", {
-      appExists: !!appRef.current,
-      isReady,
-      itemsExists: !!items,
-      itemsLength: items?.length || 0,
-      itemsType: typeof items,
-      firstItem: items?.[0],
-      lastUpdateItemsLength: lastUpdateItems?.length || 0,
-      itemsIsArray: Array.isArray(items),
-      itemsValue: items,
-    });
-
     if (appRef.current && isReady) {
       // Check if we have valid items array with content
       if (items && Array.isArray(items) && items.length > 0) {
@@ -870,15 +817,6 @@ export default function CircularGallery({
           );
 
         if (itemsChanged) {
-          console.log("✅ CircularGallery: Updating with new Unsplash items:", {
-            itemsLength: items.length,
-            firstItem: items[0],
-            bend,
-            textColor,
-            borderRadius,
-            font,
-          });
-
           // Add a small delay to ensure the app is fully ready
           setTimeout(() => {
             if (appRef.current) {
@@ -893,22 +831,8 @@ export default function CircularGallery({
             }
           }, 100);
         } else {
-          console.log("⏭️ CircularGallery: Items unchanged, skipping update");
         }
-      } else {
-        // If items become empty/undefined, only update other props
-        console.log("⏸️ CircularGallery: No valid items available:", {
-          itemsExists: !!items,
-          isArray: Array.isArray(items),
-          length: items?.length || 0,
-          itemsType: typeof items,
-        });
       }
-    } else {
-      console.log("⏳ CircularGallery: App not ready yet:", {
-        appExists: !!appRef.current,
-        isReady,
-      });
     }
   }, [
     items,

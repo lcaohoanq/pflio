@@ -7,6 +7,8 @@ import React, {
   useState,
 } from "react";
 import SkillsSection from "../components/SkillsSection";
+import { useTranslation } from "react-i18next";
+import LanguageSelector from "~/components/LanguageSelector";
 // import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
 import CircularGallery from "~/components/CircularGallery/CircularGallery";
 import { Section } from "~/constants";
@@ -19,6 +21,7 @@ import { useTheme } from "../components/ThemeProvider";
 
 const Portfolio: React.FC = () => {
   const { theme } = useTheme();
+  const { t, i18n } = useTranslation();
   // Unsplash integration for gallery
   const {
     items: unsplashItems,
@@ -56,18 +59,17 @@ const Portfolio: React.FC = () => {
   const sectionsRef = useRef<HTMLElement[]>([]);
   const particlesRef = useRef<HTMLDivElement[]>([]);
   const hasPlayedRainPoop = useRef(false);
-  const sectionTitles = ["Hero", "About", "Skills", "Projects", "Contact"];
   const currentSetting = settings.find((e) => e.section === currentSection);
 
   // Debug when galleryItems change and when we're on the about section
   useEffect(() => {}, [unsplashSuccess, unsplashItems, currentSection]);
 
-  const sections: SectionType[] = useMemo(
-    () => [
+  const sections: SectionType[] = useMemo(() => {
+    return [
       {
         id: Section.HERO,
-        title: "Welcome to My Portfolio",
-        subtitle: "Software Engineer & Backend Developer",
+        title: t("portfolio.hero.title"),
+        subtitle: t("portfolio.hero.subtitle"),
         content: (
           <div className="text-left space-y-6 md:space-y-8">
             <div className="relative flex items-start gap-20 md:gap-20">
@@ -96,21 +98,22 @@ const Portfolio: React.FC = () => {
                   className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
                   style={{ color: theme.colors.text }}
                 >
-                  <span className="inline-block hover:scale-105 transition-transform duration-300">
-                    Luu
-                  </span>{" "}
-                  <span className="inline-block hover:scale-105 transition-transform duration-300">
-                    Cao
-                  </span>{" "}
-                  <span className="inline-block hover:scale-105 transition-transform duration-300">
-                    Hoang
-                  </span>
+                  {t("portfolio.hero.name")
+                    .split(" ")
+                    .map((word, index, array) => (
+                      <React.Fragment key={index}>
+                        <span className="inline-block hover:scale-105 transition-transform duration-300">
+                          {word}
+                        </span>
+                        {index < array.length - 1 && " "}
+                      </React.Fragment>
+                    ))}
                 </h1>
                 <p
                   className="text-base md:text-lg leading-relaxed max-w-2xl"
                   style={{ color: theme.colors.textSecondary }}
                 >
-                  Full Stack Developer, He/Him
+                  {t("portfolio.hero.role")}
                 </p>
                 <div className="flex flex-col sm:flex-row justify-start items-start sm:items-center mt-6">
                   <a
@@ -138,35 +141,7 @@ const Portfolio: React.FC = () => {
                   className="text-base md:text-lg leading-relaxed max-w-2xl"
                   style={{ color: theme.colors.textSecondary }}
                 >
-                  I enjoy shaping ideas into systems that make sense — backend
-                  services built with{" "}
-                  <span
-                    className="font-semibold"
-                    style={{ color: theme.colors.accent }}
-                  >
-                    Spring Boot
-                  </span>
-                  , intuitive interfaces in{" "}
-                  <span
-                    className="font-semibold"
-                    style={{ color: theme.colors.primary }}
-                  >
-                    React
-                  </span>
-                  , and cloud-ready infrastructure that holds everything
-                  together. My experience across frontend, backend, DevOps, and
-                  mobile gives me a balanced view of how a product should work
-                  as a whole. I'm steadily moving toward a{" "}
-                  <span
-                    className="font-semibold"
-                    style={{ color: theme.colors.accent }}
-                  >
-                    Solution Architect
-                  </span>{" "}
-                  role — focused on clarity, long-term thinking, and building
-                  systems that are both elegant and practical. Looking for
-                  opportunities in Tokyo where I can grow and shape meaningful
-                  technical direction.
+                  {t("portfolio.hero.description")}
                 </p>
               </div>
             </div>
@@ -176,8 +151,8 @@ const Portfolio: React.FC = () => {
       },
       {
         id: Section.ABOUT,
-        title: "About Me",
-        subtitle: "My Journey & Passion",
+        title: t("portfolio.about.title"),
+        subtitle: t("portfolio.about.subtitle"),
         content: (
           <>
             <div className="max-w-4xl mx-auto">
@@ -187,24 +162,19 @@ const Portfolio: React.FC = () => {
                     className="text-4xl font-bold"
                     style={{ color: theme.colors.text }}
                   >
-                    Who I Am
+                    {t("portfolio.about.whoIAm")}
                   </h2>
                   <p
                     className="text-lg leading-relaxed"
                     style={{ color: theme.colors.textSecondary }}
                   >
-                    I'm a dedicated software engineer with a passion for backend
-                    development, particularly with Spring Boot. I love creating
-                    robust, scalable applications and exploring the latest
-                    technologies in web development.
+                    {t("portfolio.about.intro")}
                   </p>
                   <p
                     className="text-lg leading-relaxed"
                     style={{ color: theme.colors.textSecondary }}
                   >
-                    When I'm not coding, you'll find me capturing moments
-                    through photography on Unsplash, cycling through scenic
-                    routes, or sharing knowledge through my blog "shinbun 新聞".
+                    {t("portfolio.about.hobbies")}
                   </p>
                 </div>
 
@@ -224,7 +194,7 @@ const Portfolio: React.FC = () => {
                       50+
                     </h3>
                     <p style={{ color: theme.colors.textSecondary }}>
-                      Projects
+                      {t("portfolio.about.projects")}
                     </p>
                   </div>
                   <div
@@ -241,7 +211,7 @@ const Portfolio: React.FC = () => {
                       2+
                     </h3>
                     <p style={{ color: theme.colors.textSecondary }}>
-                      Years Experience
+                      {t("portfolio.about.experience")}
                     </p>
                   </div>
                 </div>
@@ -276,8 +246,8 @@ const Portfolio: React.FC = () => {
       },
       {
         id: Section.SKILLS,
-        title: "Technical Skills",
-        subtitle: "Technologies I Work With",
+        title: t("portfolio.skills.title"),
+        subtitle: t("portfolio.skills.subtitle"),
         content: <SkillsSection currentSection={currentSection} />,
         background: theme.colors.background,
       },
@@ -290,17 +260,17 @@ const Portfolio: React.FC = () => {
       // },
       {
         id: Section.CONTACT,
-        title: "Let's Connect",
-        subtitle: "Get In Touch",
+        title: t("portfolio.contact.title"),
+        subtitle: t("portfolio.contact.subtitle"),
         content: (
           <div className="max-w-4xl mx-auto text-center">
             <p
               className="text-xl mb-8"
               style={{ color: theme.colors.textSecondary }}
             >
-              I'm always interested in new opportunities and collaborations.
+              {t("portfolio.contact.message")}
               <br />
-              Feel free to reach out if you'd like to work together!
+              {t("portfolio.contact.reachOut")}
             </p>
             <div className="grid md:grid-cols-1 gap-8 mb-12 ">
               <div className="space-y-4">
@@ -347,9 +317,14 @@ const Portfolio: React.FC = () => {
         ),
         background: theme.colors.background,
       },
-    ],
-    [theme.colors, unsplashSuccess, unsplashItems],
-  );
+    ];
+  }, [
+    theme.colors,
+    unsplashSuccess,
+    unsplashItems,
+    i18n.language,
+    currentSection,
+  ]);
 
   useEffect(() => {
     // Initialize sections animation
@@ -569,6 +544,8 @@ const Portfolio: React.FC = () => {
       onTouchEnd={handleTouchEnd}
       ref={containerRef}
     >
+      {/* Language Selector */}
+      <LanguageSelector />
       {/* Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-1 bg-white/20 z-50">
         <div
@@ -699,9 +676,9 @@ const Portfolio: React.FC = () => {
                 <div className="w-1 h-2 md:h-3 bg-[#121212] rounded-full mt-1 md:mt-2 animate-pulse" />
               </div>
             )}
-            {currentSetting?.scrollGuideText && (
+            {currentSetting?.scrollGuideTextKey && (
               <p className="mt-2 text-xs md:text-sm text-[#121212]">
-                {currentSetting.scrollGuideText}
+                {t(currentSetting.scrollGuideTextKey)}
               </p>
             )}
           </div>
