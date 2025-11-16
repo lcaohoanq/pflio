@@ -9,10 +9,13 @@ import React, {
 import SkillsSection from "../components/SkillsSection";
 // import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
 import CircularGallery from "~/components/CircularGallery/CircularGallery";
+import { Section } from "~/constants";
 import { useUnsplashForGallery } from "~/hooks/useUnsplash";
+import { SectionType } from "~/types";
+import { doRainPoop } from "~/utils/animations";
+import { socialLinks } from "~/utils/images";
 import { settings } from "~/utils/settings";
 import { useTheme } from "../components/ThemeProvider";
-import { socialLinks } from "~/utils/images";
 
 const Portfolio: React.FC = () => {
   const { theme } = useTheme();
@@ -52,16 +55,17 @@ const Portfolio: React.FC = () => {
   const [showPerformanceMonitor, setShowPerformanceMonitor] = useState(false);
   const sectionsRef = useRef<HTMLElement[]>([]);
   const particlesRef = useRef<HTMLDivElement[]>([]);
+  const hasPlayedRainPoop = useRef(false);
   const sectionTitles = ["Hero", "About", "Skills", "Projects", "Contact"];
   const currentSetting = settings.find((e) => e.section === currentSection);
 
   // Debug when galleryItems change and when we're on the about section
   useEffect(() => {}, [unsplashSuccess, unsplashItems, currentSection]);
 
-  const sections = useMemo(
+  const sections: SectionType[] = useMemo(
     () => [
       {
-        id: "hero",
+        id: Section.HERO,
         title: "Welcome to My Portfolio",
         subtitle: "Software Engineer & Backend Developer",
         content: (
@@ -160,7 +164,7 @@ const Portfolio: React.FC = () => {
         background: theme.colors.background,
       },
       {
-        id: "about",
+        id: Section.ABOUT,
         title: "About Me",
         subtitle: "My Journey & Passion",
         content: (
@@ -260,7 +264,7 @@ const Portfolio: React.FC = () => {
         background: theme.colors.background,
       },
       {
-        id: "skills",
+        id: Section.SKILLS,
         title: "Technical Skills",
         subtitle: "Technologies I Work With",
         content: <SkillsSection currentSection={currentSection} />,
@@ -274,7 +278,7 @@ const Portfolio: React.FC = () => {
       //   background: theme.colors.background,
       // },
       {
-        id: "contact",
+        id: Section.CONTACT,
         title: "Let's Connect",
         subtitle: "Get In Touch",
         content: (
@@ -299,8 +303,11 @@ const Portfolio: React.FC = () => {
                   <img src="/email.svg" alt="GitHub" className="w-6 h-6" />
                 </div>
                 <p
-                  style={{
-                    color: theme.colors.textSecondary,
+                  style={{ color: theme.colors.textSecondary }}
+                  onClick={() => {
+                    doRainPoop(() => {
+                      // window.location.href = "mailto:hoangclw@gmail.com";
+                    });
                   }}
                 >
                   hoangclw@gmail.com
@@ -531,6 +538,19 @@ const Portfolio: React.FC = () => {
       return () => clearTimeout(timer);
     }
   }, [showScrollEffects]);
+
+  // Auto trigger doRainPoop when entering contact section (only once)
+  useEffect(() => {
+    // Contact section is at index 3 (0: hero, 1: about, 2: skills, 3: contact)
+    const contactSectionIndex = sections.findIndex(
+      (s) => s.id === Section.CONTACT,
+    );
+    if (currentSection === contactSectionIndex && !hasPlayedRainPoop.current) {
+      hasPlayedRainPoop.current = true;
+      doRainPoop();
+    }
+  }, [currentSection, sections]);
+
   return (
     <div
       className="relative h-screen w-full overflow-hidden select-none"

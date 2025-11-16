@@ -86,6 +86,9 @@ importers:
       ogl:
         specifier: ^1.0.11
         version: 1.0.11
+      poopetti:
+        specifier: ^1.2.0
+        version: 1.2.0
       prop-types:
         specifier: ^15.8.1
         version: 15.8.1
@@ -2650,6 +2653,9 @@ packages:
   pirates@4.0.7:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
+
+  poopetti@1.2.0:
+    resolution: {integrity: sha512-GYrzwkVtVkyvIpjxsjaaWPYHhAx9fluUkIY/VchPZMdjWLET8vlysaLX/FIhO8b/TTQghDF441yis6COMj3iig==}
 
   possible-typed-array-names@1.1.0:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
@@ -5756,6 +5762,8 @@ snapshots:
   pify@2.3.0: {}
 
   pirates@4.0.7: {}
+
+  poopetti@1.2.0: {}
 
   possible-typed-array-names@1.1.0: {}
 
