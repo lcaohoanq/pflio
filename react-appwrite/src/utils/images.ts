@@ -71,6 +71,11 @@ export const socialLinks = [
     alt: "LinkedIn",
   },
   {
+    href: "https://www.youtube.com/@lcaohoanq",
+    icon: "/youtube.png",
+    alt: "Youtube",
+  },
+  {
     href: "https://unsplash.com/@lcaohoanq",
     icon: "/unsplash.png",
     alt: "Unsplash",

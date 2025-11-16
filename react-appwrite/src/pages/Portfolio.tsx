@@ -138,24 +138,35 @@ const Portfolio: React.FC = () => {
                   className="text-base md:text-lg leading-relaxed max-w-2xl"
                   style={{ color: theme.colors.textSecondary }}
                 >
-                  Passionate about creating innovative solutions with{" "}
+                  I enjoy shaping ideas into systems that make sense — backend
+                  services built with{" "}
                   <span
                     className="font-semibold"
                     style={{ color: theme.colors.accent }}
                   >
                     Spring Boot
                   </span>
-                  ,{" "}
+                  , intuitive interfaces in{" "}
                   <span
                     className="font-semibold"
                     style={{ color: theme.colors.primary }}
                   >
                     React
                   </span>
-                  , and modern web technologies. Creative and visionary Full
-                  Stack Developer with a passion for delivering impactful brand
-                  experiences. Seeking a challenging role in Tokyo to lead and
-                  inspire a talented engineering team.
+                  , and cloud-ready infrastructure that holds everything
+                  together. My experience across frontend, backend, DevOps, and
+                  mobile gives me a balanced view of how a product should work
+                  as a whole. I'm steadily moving toward a{" "}
+                  <span
+                    className="font-semibold"
+                    style={{ color: theme.colors.accent }}
+                  >
+                    Solution Architect
+                  </span>{" "}
+                  role — focused on clarity, long-term thinking, and building
+                  systems that are both elegant and practical. Looking for
+                  opportunities in Tokyo where I can grow and shape meaningful
+                  technical direction.
                 </p>
               </div>
             </div>
