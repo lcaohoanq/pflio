@@ -8,6 +8,8 @@ interface ToolsLayoutProps {
 export function ToolsLayout({ children }: ToolsLayoutProps) {
   return (
     <div className="flex min-h-screen bg-gray-900">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Developer Tools - PFL.IO</title>
       <ToolsSidebar />
       <main className="flex-1 overflow-auto">{children}</main>
     </div>
