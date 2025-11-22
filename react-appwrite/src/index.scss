@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Theme CSS Variables */
-  --theme-primary: #8b5cf6;
-  --theme-secondary: #ec4899;
-  --theme-accent: #06ffa5;
-  --theme-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --theme-surface: rgba(139, 92, 246, 0.15);
-  --theme-text: #ffffff;
-  --theme-text-secondary: #e2e8f0;
-  --theme-border: #8b5cf6;
-  --theme-glow: #8b5cf6;
-  --theme-gradient: linear-gradient(45deg, #8b5cf6, #ec4899);
-  --theme-particle: #8b5cf6;
-}
-
 /* High contrast mode */
 body.high-contrast {
   filter: contrast(150%) brightness(110%);
@@ -94,12 +79,12 @@ body.high-contrast {
 }
 
 /* Performance optimizations */
-* {
+// * {
   /* Enable GPU acceleration for all transforms */
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
+  // transform-style: preserve-3d;
+  // backface-visibility: hidden;
+  // perspective: 1000px;
+// }
 
 /* Optimize animations */
 .animate-pulse,
