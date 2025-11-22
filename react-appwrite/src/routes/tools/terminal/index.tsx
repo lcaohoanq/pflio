@@ -5,6 +5,7 @@ import { WebContainer } from "@webcontainer/api";
 import { Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import "xterm/css/xterm.css";
+import { ToolsLayout } from "~/feature/tools/layouts/ToolsLayout";
 
 // Global WebContainer instance - only boot once
 let webContainerInstance: WebContainer | null = null;
@@ -122,18 +123,23 @@ const WebContainerTerminal = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4">
-      <div className="container mx-auto">
-        <h1 className="text-2xl font-bold text-white mb-4">
-          WebContainer Terminal
-        </h1>
-        <div
-          ref={terminalRef}
-          className="rounded-lg overflow-hidden border border-gray-700"
-          style={{ height: "600px", width: "100%" }}
-        />
+    <ToolsLayout>
+      <div className="min-h-screen bg-gray-900 p-6">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-lime-400 bg-clip-text text-transparent mb-6">
+            WebContainer Terminal
+          </h1>
+          <div
+            ref={terminalRef}
+            className="rounded-lg overflow-hidden border-2 border-gray-700 shadow-2xl"
+            style={{ height: "calc(100vh - 200px)", width: "100%" }}
+          />
+          <div className="mt-4 text-sm text-gray-400">
+            <p>💡 Tip: Type "help" to see available commands</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </ToolsLayout>
   );
 };
 

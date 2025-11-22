@@ -9,7 +9,9 @@ export const Route = createRootRoute({
       <ThemeProvider>
         <Outlet />
       </ThemeProvider>
-      {import.meta.env.DEV && <TanStackRouterDevtools />}
+      {import.meta.env.DEV && (
+        <TanStackRouterDevtools position="bottom-right" />
+      )}
     </>
   ),
 });
