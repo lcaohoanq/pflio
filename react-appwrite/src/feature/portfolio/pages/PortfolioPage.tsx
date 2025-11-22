@@ -538,156 +538,163 @@ const Portfolio: React.FC = () => {
   }, [currentSection, sections]);
 
   return (
-    <div
-      className="relative h-screen w-full overflow-hidden select-none"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      ref={containerRef}
-    >
+    <>
+      <title>Portfolio - PFL.IO</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="author" content="lcaohoanq" />
+      <meta
+        name="description"
+        content="Full-stack developer portfolio showcasing projects and skills"
+      />
 
-      {/* Language Selector */}
-      <LanguageSelector />
-      {/* Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-white/20 z-50">
-        <div
-          className="h-full bg-white transition-all duration-700 ease-out"
-          style={{
-            width: `${((currentSection + 1) / sections.length) * 100}%`,
-          }}
-        />
-      </div>
-
-      {/* Navigation Dots */}
-      <div className="fixed right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-50 gap-3 space-y-3">
-        {sections.map((section, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToSection(index)}
-            disabled={isAnimating}
-            className={`group relative w-3 h-3 rounded-full transition-all duration-300 ${
-              currentSection === index
-                ? "bg-black scale-150 ring-2 ring-white"
-                : "bg-black/40 hover:bg-black/70 hover:scale-125"
-            } ${isAnimating ? "pointer-events-none" : ""}`}
-            aria-label={`Go to section ${index + 1}: ${section.title}`}
-          >
-            {/* Tooltip */}
-            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-              {section.title}
-            </span>
-          </button>
-        ))}
-      </div>
-      {/* Sections */}
-      {sections.map((section, index) => (
-        <section
-          key={section.id}
-          ref={(el) => {
-            if (el) sectionsRef.current[index] = el;
-          }}
-          className={`absolute inset-0 flex items-center justify-center px-4 md:px-8 ${
-            currentSection === index ? "block" : "hidden"
-          }`}
-          style={{
-            background: section.background,
-            backgroundAttachment: "fixed",
-          }}
-        >
+      <div
+        className="relative h-screen w-full overflow-hidden select-none"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        ref={containerRef}
+      >
+        {/* Language Selector */}
+        <LanguageSelector />
+        {/* Progress Bar */}
+        <div className="fixed top-0 left-0 w-full h-1 bg-white/20 z-50">
           <div
-            className={`w-full mx-auto relative ${
-              section.id === "skills" || section.id === "about"
-                ? "max-w-5xl"
-                : "max-w-3xl"
-            }`}
-          >
-            {/* Enhanced floating particles effect with morphing shapes */}
-            <div
-              className="absolute inset-0 overflow-hidden pointer-events-none"
-              ref={(el) => {
-                if (el) particlesRef.current[index] = el;
-              }}
-            >
-              {[...Array(30)].map((_, i) => {
-                const shapes = ["circle", "square", "triangle", "diamond"];
-                const shape = shapes[i % shapes.length];
-                const size = Math.random() * 4 + 2;
-
-                return (
-                  <div
-                    key={i}
-                    className={`absolute animate-pulse particle-${shape}`}
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      width: `${size}px`,
-                      height: `${size}px`,
-                      borderRadius:
-                        shape === "circle"
-                          ? "50%"
-                          : shape === "diamond"
-                            ? "50% 0"
-                            : "0",
-                      // transform:  shape === "triangle" ? "rotate(45deg)" : "none",
-                      animationDelay: `${Math.random() * 2}s`,
-                      animationDuration: `${2 + Math.random() * 3}s`,
-                      filter: `hue-rotate(${index * 60}deg)`,
-                    }}
-                  />
-                );
-              })}
-            </div>
-
-            {/* Parallax content wrapper */}
-            <>{section.content}</>
-
-            {/* Section-specific background effects */}
-            {index === 0 && (
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {/* Code rain effect for hero section */}
-                {[...Array(10)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute text-green-300/20 font-mono text-xs animate-pulse"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      animationDelay: `${Math.random() * 2}s`,
-                      transform: `rotate(${Math.random() * 360}deg)`,
-                    }}
-                  >
-                    {
-                      ["</>", "{code}", "API", "React", "Java", "Spring"][
-                        Math.floor(Math.random() * 6)
-                      ]
-                    }
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      ))}
-
-      {/* Scroll Indicator */}
-      {currentSection < sections.length - 1 && (
-        <div className="fixed bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-50 text-white text-center">
-          <div className="animate-bounce text-center opacity-80">
-            {currentSetting?.isShowIcon && (
-              <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-[#121212] rounded-full flex justify-center">
-                <div className="w-1 h-2 md:h-3 bg-[#121212] rounded-full mt-1 md:mt-2 animate-pulse" />
-              </div>
-            )}
-            {currentSetting?.scrollGuideTextKey && (
-              <p className="mt-2 text-xs md:text-sm text-[#121212]">
-                {t(currentSetting.scrollGuideTextKey)}
-              </p>
-            )}
-          </div>
+            className="h-full bg-white transition-all duration-700 ease-out"
+            style={{
+              width: `${((currentSection + 1) / sections.length) * 100}%`,
+            }}
+          />
         </div>
-      )}
-    </div>
+
+        {/* Navigation Dots */}
+        <div className="fixed right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-50 gap-3 space-y-3">
+          {sections.map((section, index) => (
+            <button
+              key={index}
+              onClick={() => scrollToSection(index)}
+              disabled={isAnimating}
+              className={`group relative w-3 h-3 rounded-full transition-all duration-300 ${
+                currentSection === index
+                  ? "bg-black scale-150 ring-2 ring-white"
+                  : "bg-black/40 hover:bg-black/70 hover:scale-125"
+              } ${isAnimating ? "pointer-events-none" : ""}`}
+              aria-label={`Go to section ${index + 1}: ${section.title}`}
+            >
+              {/* Tooltip */}
+              <span className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                {section.title}
+              </span>
+            </button>
+          ))}
+        </div>
+        {/* Sections */}
+        {sections.map((section, index) => (
+          <section
+            key={section.id}
+            ref={(el) => {
+              if (el) sectionsRef.current[index] = el;
+            }}
+            className={`absolute inset-0 flex items-center justify-center px-4 md:px-8 ${
+              currentSection === index ? "block" : "hidden"
+            }`}
+            style={{
+              background: section.background,
+              backgroundAttachment: "fixed",
+            }}
+          >
+            <div
+              className={`w-full mx-auto relative ${
+                section.id === "skills" || section.id === "about"
+                  ? "max-w-5xl"
+                  : "max-w-3xl"
+              }`}
+            >
+              {/* Enhanced floating particles effect with morphing shapes */}
+              <div
+                className="absolute inset-0 overflow-hidden pointer-events-none"
+                ref={(el) => {
+                  if (el) particlesRef.current[index] = el;
+                }}
+              >
+                {[...Array(30)].map((_, i) => {
+                  const shapes = ["circle", "square", "triangle", "diamond"];
+                  const shape = shapes[i % shapes.length];
+                  const size = Math.random() * 4 + 2;
+
+                  return (
+                    <div
+                      key={i}
+                      className={`absolute animate-pulse particle-${shape}`}
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        width: `${size}px`,
+                        height: `${size}px`,
+                        borderRadius:
+                          shape === "circle"
+                            ? "50%"
+                            : shape === "diamond"
+                              ? "50% 0"
+                              : "0",
+                        // transform:  shape === "triangle" ? "rotate(45deg)" : "none",
+                        animationDelay: `${Math.random() * 2}s`,
+                        animationDuration: `${2 + Math.random() * 3}s`,
+                        filter: `hue-rotate(${index * 60}deg)`,
+                      }}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Parallax content wrapper */}
+              <>{section.content}</>
+
+              {/* Section-specific background effects */}
+              {index === 0 && (
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  {/* Code rain effect for hero section */}
+                  {[...Array(10)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute text-green-300/20 font-mono text-xs animate-pulse"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        animationDelay: `${Math.random() * 2}s`,
+                        transform: `rotate(${Math.random() * 360}deg)`,
+                      }}
+                    >
+                      {
+                        ["</>", "{code}", "API", "React", "Java", "Spring"][
+                          Math.floor(Math.random() * 6)
+                        ]
+                      }
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        ))}
+
+        {/* Scroll Indicator */}
+        {currentSection < sections.length - 1 && (
+          <div className="fixed bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-50 text-white text-center">
+            <div className="animate-bounce text-center opacity-80">
+              {currentSetting?.isShowIcon && (
+                <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-[#121212] rounded-full flex justify-center">
+                  <div className="w-1 h-2 md:h-3 bg-[#121212] rounded-full mt-1 md:mt-2 animate-pulse" />
+                </div>
+              )}
+              {currentSetting?.scrollGuideTextKey && (
+                <p className="mt-2 text-xs md:text-sm text-[#121212]">
+                  {t(currentSetting.scrollGuideTextKey)}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
