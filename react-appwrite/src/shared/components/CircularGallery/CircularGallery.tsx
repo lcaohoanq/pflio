@@ -8,7 +8,7 @@ import {
   Transform,
 } from "ogl";
 import React, { useEffect, useRef, useState } from "react";
-import { defaultImageItems } from "~/utils/images";
+import { defaultImageItems } from "~/shared/utils/images";
 
 type GL = Renderer["gl"];
 

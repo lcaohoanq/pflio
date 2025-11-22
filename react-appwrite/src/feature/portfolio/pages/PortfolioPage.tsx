@@ -6,18 +6,18 @@ import React, {
   useRef,
   useState,
 } from "react";
-import SkillsSection from "../components/SkillsSection";
+import SkillsSection from "../../../shared/components/SkillsSection";
 import { useTranslation } from "react-i18next";
-import LanguageSelector from "~/components/LanguageSelector";
+import LanguageSelector from "~/shared/components/LanguageSelector";
 // import AccessibilityEnhancer from "../components/AccessibilityEnhancer";
-import CircularGallery from "~/components/CircularGallery/CircularGallery";
-import { Section } from "~/constants";
-import { useUnsplashForGallery } from "~/hooks/useUnsplash";
-import { SectionType } from "~/types";
-import { doRainPoop } from "~/utils/animations";
-import { socialLinks } from "~/utils/images";
-import { settings } from "~/utils/settings";
-import { useTheme } from "../components/ThemeProvider";
+import CircularGallery from "~/shared/components/CircularGallery/CircularGallery";
+import { Section } from "~/shared/constants";
+import { useUnsplashForGallery } from "~/shared/hooks/useUnsplash";
+import { SectionType } from "~/shared/types";
+import { doRainPoop } from "~/shared/utils/animations";
+import { socialLinks } from "~/shared/utils/images";
+import { settings } from "~/shared/utils/settings";
+import { useTheme } from "../../../shared/components/ThemeProvider";
 
 const Portfolio: React.FC = () => {
   const { theme } = useTheme();

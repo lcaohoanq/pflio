@@ -1,4 +1,4 @@
-import { ENV } from "~/env";
+import { ENV } from "~/shared/env";
 
 const UNSPLASH_ROOT = "https://api.unsplash.com";
 const CLIENT_ID = ENV.UNSPLASH_ACCESS_KEY;

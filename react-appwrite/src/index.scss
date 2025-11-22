@@ -157,10 +157,11 @@ h1, h2, h3 {
 /* Custom scrollbar for webkit browsers */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -170,6 +171,11 @@ h1, h2, h3 {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* Hide horizontal scrollbar */
+::-webkit-scrollbar:horizontal {
+  display: none;
 }
 
 /* Disable scrollbar for portfolio page */

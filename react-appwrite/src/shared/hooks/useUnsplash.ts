@@ -4,7 +4,7 @@ import {
   UnsplashPhoto,
   UnsplashApiResponse,
   UnsplashSortOrder,
-} from "~/apis/unsplash.apis";
+} from "~/shared/apis/unsplash.apis";
 
 export interface UseUnsplashConfig {
   username?: string;

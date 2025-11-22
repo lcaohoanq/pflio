@@ -1,4 +1,4 @@
-import { Section } from "~/constants";
+import { Section } from "~/shared/constants";
 
 export type Project = {
   title: string;

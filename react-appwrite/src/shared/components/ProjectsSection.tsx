@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Project } from "~/types";
+import { Project } from "~/shared/types";
 
 interface Props {
   currentSection: number;
