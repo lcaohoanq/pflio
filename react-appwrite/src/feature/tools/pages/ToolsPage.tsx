@@ -2,15 +2,14 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "~/shared/components/ui/card";
 import { Button } from "~/shared/components/ui/button";
-import { Code2, ArrowRight } from "lucide-react";
-import NavBar from "~/shared/components/navbar";
+import { Code2, Terminal, ArrowRight } from "lucide-react";
+import { ToolsLayout } from "~/feature/tools/layouts/ToolsLayout";
 
 export function ToolsPage() {
   const tools = [
@@ -28,7 +27,7 @@ export function ToolsPage() {
       title: "Web Terminal",
       description:
         "A simulated terminal environment in your browser. Practice command-line skills and run basic shell commands.",
-      icon: Code2,
+      icon: Terminal,
       path: "/tools/terminal",
       color: "from-green-500 to-lime-500",
     },
@@ -36,35 +35,27 @@ export function ToolsPage() {
   ];
 
   return (
-    <div className="from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      {/* Header */}
-      {/* <header className="border-b bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link
-            to="/"
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-          >
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Portfolio
-            </span>
-          </Link>
-          <h1 className="text-xl font-semibold">Developer Tools</h1>
+    <ToolsLayout>
+      <div className="min-h-screen bg-gray-900 text-white p-8">
+        {/* Header */}
+        <div className="max-w-7xl mx-auto mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+            Developer Tools
+          </h1>
+          <p className="text-gray-400 text-lg">
+            Select a tool to get started or explore all available tools below
+          </p>
         </div>
-      </header> */}
 
-      <NavBar />
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
-        <div className="max-w-6xl mx-auto space-y-8">
-          {/* Tools Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Tools Grid */}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {tools.map((tool) => {
               const Icon = tool.icon;
               return (
                 <Card
                   key={tool.id}
-                  className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-blue-500/50 overflow-hidden"
+                  className="group hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-1 border-2 border-gray-800 hover:border-blue-500/50 overflow-hidden bg-gray-800/50"
                 >
                   {/* Gradient Header */}
                   <div className={`h-2 bg-gradient-to-r ${tool.color}`} />
@@ -75,10 +66,10 @@ export function ToolsPage() {
                     >
                       <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <CardTitle className="text-2xl group-hover:text-blue-600 transition-colors">
+                    <CardTitle className="text-2xl text-white group-hover:text-blue-400 transition-colors">
                       {tool.title}
                     </CardTitle>
-                    <CardDescription className="text-base">
+                    <CardDescription className="text-base text-gray-400">
                       {tool.description}
                     </CardDescription>
                   </CardHeader>
@@ -95,8 +86,23 @@ export function ToolsPage() {
               );
             })}
           </div>
+
+          {/* Coming Soon Section */}
+          <div className="mt-12">
+            <Card className="border-2 border-dashed border-gray-700 bg-gray-800/30 text-center p-8">
+              <CardHeader>
+                <CardTitle className="text-2xl text-white">
+                  More Tools Coming Soon!
+                </CardTitle>
+                <CardDescription className="text-base text-gray-400 mt-2">
+                  We're constantly adding new developer tools. Check back soon
+                  for updates!
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </ToolsLayout>
   );
 }
