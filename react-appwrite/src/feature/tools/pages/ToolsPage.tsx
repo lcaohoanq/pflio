@@ -10,6 +10,7 @@ import {
 } from "~/shared/components/ui/card";
 import { Button } from "~/shared/components/ui/button";
 import { Code2, ArrowRight } from "lucide-react";
+import NavBar from "~/shared/components/navbar";
 
 export function ToolsPage() {
   const tools = [
@@ -35,9 +36,9 @@ export function ToolsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
-      <header className="border-b bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
+      {/* <header className="border-b bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link
             to="/"
@@ -49,22 +50,13 @@ export function ToolsPage() {
           </Link>
           <h1 className="text-xl font-semibold">Developer Tools</h1>
         </div>
-      </header>
+      </header> */}
+
+      <NavBar />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto space-y-8">
-          {/* Title Section */}
-          <div className="text-center space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Development Tools
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
-              A collection of browser-based development tools to help you code,
-              learn, and experiment.
-            </p>
-          </div>
-
           {/* Tools Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tools.map((tool) => {
