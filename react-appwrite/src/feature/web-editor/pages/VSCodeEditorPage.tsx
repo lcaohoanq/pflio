@@ -4,6 +4,7 @@ import { Button } from "~/shared/components/ui/button";
 import { Card } from "~/shared/components/ui/card";
 import { Play, Download, Copy, Check, Eye, EyeOff } from "lucide-react";
 import { ToolsLayout } from "~/feature/tools/layouts/ToolsLayout";
+import { ToolsNavbar } from "~/shared/components/ToolsNavbar";
 
 export default function VSCodeEditorPage() {
   const [code, setCode] = useState(`// Welcome to the Browser Code Editor!
@@ -98,6 +99,7 @@ console.log(greet("Developer"));
 
   return (
     <ToolsLayout>
+      <ToolsNavbar />
       <div className="min-h-screen bg-gray-900 text-white">
         {/* Header */}
         <header className="border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm sticky top-0 z-10">

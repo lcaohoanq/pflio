@@ -80,4 +80,9 @@ export const socialLinks = [
     icon: "/unsplash.png",
     alt: "Unsplash",
   },
+  {
+    href: "/tools",
+    icon: "/keyboard-and-mouse.png",
+    alt: "Tools",
+  },
 ];

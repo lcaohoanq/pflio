@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-
 import React, { useEffect, useRef } from "react";
 import { WebContainer } from "@webcontainer/api";
 import { Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import "xterm/css/xterm.css";
 import { ToolsLayout } from "~/feature/tools/layouts/ToolsLayout";
+import { ToolsNavbar } from "~/shared/components/ToolsNavbar";
 
 // Global WebContainer instance - only boot once
 let webContainerInstance: WebContainer | null = null;
@@ -124,6 +124,7 @@ const WebContainerTerminal = () => {
 
   return (
     <ToolsLayout>
+      <ToolsNavbar />
       <div className="min-h-screen bg-gray-900 p-6">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-lime-400 bg-clip-text text-transparent mb-6">
