@@ -55,6 +55,20 @@ const WebContainerTerminal = () => {
     // --- 2. Boot WebContainer & Start Shell ---
     const startShell = async () => {
       try {
+        // Check if cross-origin isolated
+        if (!crossOriginIsolated) {
+          term.write("\r\n");
+          term.write("❌ WebContainer requires Cross-Origin Isolation\r\n");
+          term.write("This feature requires specific HTTP headers:\r\n");
+          term.write("  - Cross-Origin-Embedder-Policy: require-corp\r\n");
+          term.write("  - Cross-Origin-Opener-Policy: same-origin\r\n\r\n");
+          term.write("These headers are configured in vercel.json.\r\n");
+          term.write(
+            "If you just deployed, please wait a few minutes and refresh.\r\n",
+          );
+          return;
+        }
+
         term.write("Booting WebContainer...\r\n");
 
         // Get or boot the WebContainer instance (only boots once)
