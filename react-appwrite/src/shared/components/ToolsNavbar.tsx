@@ -254,10 +254,8 @@ export function ToolsNavbar() {
               </Button>
 
               {/* User Menu Placeholder */}
-              <Button variant="ghost" size="sm" className="ml-2">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 flex items-center justify-center text-white text-xs font-bold">
-                  U
-                </div>
+              <Button variant="outline" size="lg" className="ml-2">
+                Buy me a coffee
               </Button>
             </div>
 
