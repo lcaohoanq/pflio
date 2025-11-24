@@ -8,7 +8,7 @@ interface ToolsLayoutProps {
 export function ToolsLayout({ children }: ToolsLayoutProps) {
   return (
     <>
-      <title>Developer Tools - PFL.IO</title>
+      <title>DevTools - Handy online tools for developer</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <div className="flex min-h-screen bg-gray-900">
         <ToolsSidebar />

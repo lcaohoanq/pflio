@@ -9,31 +9,93 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Database,
+  Network,
+  Settings,
+  FileJson,
 } from "lucide-react";
 import { cn } from "~/shared/utils/utils";
 
-interface Tool {
+type Tool = {
   id: string;
   title: string;
   icon: React.ElementType;
   path: string;
   description: string;
-}
+};
 
-const tools: Tool[] = [
+type ToolGroup = {
+  groupTitle: string;
+  tools: Tool[];
+};
+
+const toolGroups: ToolGroup[] = [
   {
-    id: "vscode",
-    title: "Code Editor",
-    icon: Code2,
-    path: "/tools/vscode",
-    description: "Browser-based Monaco Editor",
+    groupTitle: "Editors",
+    tools: [
+      {
+        id: "vscode",
+        title: "Code Editor",
+        icon: Code2,
+        path: "/tools/vscode",
+        description: "Browser-based Monaco Editor",
+      },
+      {
+        id: "json-editor",
+        title: "JSON Editor",
+        icon: FileJson,
+        path: "/tools/json-editor",
+        description: "Format and validate JSON",
+      },
+    ],
   },
   {
-    id: "terminal",
-    title: "Web Terminal",
-    icon: TerminalIcon,
-    path: "/tools/terminal",
-    description: "Interactive terminal environment",
+    groupTitle: "Development",
+    tools: [
+      {
+        id: "terminal",
+        title: "Web Terminal",
+        icon: TerminalIcon,
+        path: "/tools/terminal",
+        description: "Interactive terminal environment",
+      },
+    ],
+  },
+  {
+    groupTitle: "Database",
+    tools: [
+      {
+        id: "sql-client",
+        title: "SQL Client",
+        icon: Database,
+        path: "/tools/sql-client",
+        description: "Query and manage databases",
+      },
+    ],
+  },
+  {
+    groupTitle: "Network",
+    tools: [
+      {
+        id: "api-tester",
+        title: "API Tester",
+        icon: Network,
+        path: "/tools/api-tester",
+        description: "Test REST APIs",
+      },
+    ],
+  },
+  {
+    groupTitle: "Utilities",
+    tools: [
+      {
+        id: "settings",
+        title: "Settings",
+        icon: Settings,
+        path: "/tools/settings",
+        description: "Configure preferences",
+      },
+    ],
   },
 ];
 
@@ -50,11 +112,11 @@ export function ToolsSidebar({ className }: ToolsSidebarProps) {
   const SidebarContent = () => (
     <>
       {/* Header */}
-      <div className="p-4 border-b border-gray-800">
+      <div className="p-4 border-b border-gray-800 mb-3">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <h2 className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Developer Tools
+              DevTools
             </h2>
           )}
           <Button
@@ -73,73 +135,60 @@ export function ToolsSidebar({ className }: ToolsSidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-        {/* Home Link */}
-        <Link to="/">
-          <Button
-            variant={currentPath === "/" ? "secondary" : "ghost"}
-            className={cn(
-              "w-full justify-start gap-3",
-              isCollapsed && "justify-center",
+      <nav className="flex-1 p-1 overflow-y-auto">
+        {/* Tool Groups */}
+        {toolGroups.map((group, groupIndex) => (
+          <div key={group.groupTitle}>
+            {/* Group Title */}
+            {!isCollapsed && (
+              <h3 className="px-2 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                {group.groupTitle}
+              </h3>
             )}
-          >
-            <Home className="h-5 w-5 flex-shrink-0" />
-            {!isCollapsed && <span>Back to Portfolio</span>}
-          </Button>
-        </Link>
 
-        {/* Tools Overview */}
-        <Link to="/tools">
-          <Button
-            variant={currentPath === "/tools" ? "secondary" : "ghost"}
-            className={cn(
-              "w-full justify-start gap-3",
-              isCollapsed && "justify-center",
+            {/* Tools in Group */}
+            <div className="space-y-1 mb-3">
+              {group.tools.map((tool) => {
+                const Icon = tool.icon;
+                const isActive = currentPath === tool.path;
+
+                return (
+                  <Link key={tool.id} to={tool.path}>
+                    <Button
+                      variant={isActive ? "default" : "ghost"}
+                      className={cn(
+                        "w-full justify-start gap-3 group relative",
+                        isCollapsed && "justify-center px-2",
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          "h-5 w-5 flex-shrink-0",
+                          isActive && "text-white",
+                        )}
+                      />
+                      {!isCollapsed && (
+                        <span className="font-medium truncate w-full">
+                          {tool.title}
+                        </span>
+                      )}
+                      {isCollapsed && (
+                        <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
+                          {tool.title}
+                        </div>
+                      )}
+                    </Button>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Horizontal Separator (except after last group) */}
+            {groupIndex < toolGroups.length - 1 && (
+              <div className="my-4 border-t border-gray-800" />
             )}
-          >
-            <Menu className="h-5 w-5 flex-shrink-0" />
-            {!isCollapsed && <span>All Tools</span>}
-          </Button>
-        </Link>
-
-        <div className="my-4 border-t border-gray-800" />
-
-        {/* Tools List */}
-        {tools.map((tool) => {
-          const Icon = tool.icon;
-          const isActive = currentPath === tool.path;
-
-          return (
-            <Link key={tool.id} to={tool.path}>
-              <Button
-                variant={isActive ? "default" : "ghost"}
-                className={cn(
-                  "w-full justify-start gap-3 group relative",
-                  isCollapsed && "justify-center px-2",
-                )}
-              >
-                <Icon
-                  className={cn(
-                    "h-5 w-5 flex-shrink-0",
-                    isActive && "text-white",
-                  )}
-                />
-                {!isCollapsed && (
-                  <div className="flex flex-col items-start flex-1 min-w-0">
-                    <span className="font-medium truncate w-full">
-                      {tool.title}
-                    </span>
-                  </div>
-                )}
-                {isCollapsed && (
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
-                    {tool.title}
-                  </div>
-                )}
-              </Button>
-            </Link>
-          );
-        })}
+          </div>
+        ))}
       </nav>
 
       {/* Footer */}
