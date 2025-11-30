@@ -61,7 +61,7 @@ export const socialLinks = [
     alt: "GitHub",
   },
   {
-    href: "https://shinbun.vercel.app/",
+    href: "https://blog.lcaohoanq.works",
     icon: "/newspaper-solid-full.svg",
     alt: "NewsPaper",
   },
