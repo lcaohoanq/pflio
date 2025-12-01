@@ -63,7 +63,7 @@ export const socialLinks = [
   {
     href: "https://blog.lcaohoanq.works",
     icon: "/newspaper-solid-full.svg",
-    alt: "NewsPaper",
+    alt: "Personal Blog",
   },
   {
     href: "https://linkedin.com/in/lcaohoanq",
